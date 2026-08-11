@@ -1,0 +1,2218 @@
+:root {
+    --color-bg: #f4f8fb;
+    --color-surface: #ffffff;
+    --color-surface-soft: #f1f7fb;
+    --color-text: #1B1D43;
+    --color-muted: #5f6f86;
+    --color-alive: #009BEB;
+    --color-alive-dark: #1B1D43;
+    --color-alive-soft: #e6f6fe;
+    --color-dead: #1B1D43;
+    --color-dead-dark: #10122b;
+    --color-dead-soft: #e9ecf6;
+    --color-primary: #009BEB;
+    --color-primary-dark: #1B1D43;
+    --color-danger: #b3261e;
+    --color-border: rgba(27, 29, 67, 0.14);
+    --color-shadow: rgba(27, 29, 67, 0.18);
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 30px;
+    --spacing-xs: 6px;
+    --spacing-sm: 10px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --max-width: 1480px;
+    --font-main: "Sansa Pro", "SansaPro", Arial, Helvetica, sans-serif;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-height: 100%; scroll-behavior: smooth; }
+body { min-height: 100%; margin: 0; font-family: var(--font-main); background: var(--color-bg); color: var(--color-text); }
+button, input, select { font: inherit; }
+button { user-select: none; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 4px solid rgba(46, 125, 50, 0.35); outline-offset: 3px; }
+
+.app-header, .app-main, .app-footer { width: min(100% - 24px, var(--max-width)); margin-left: auto; margin-right: auto; }
+.app-header { padding: 18px 0 8px; }
+.app-main { padding: 8px 0 32px; }
+.app-footer { padding: 18px 0 28px; color: var(--color-muted); font-size: 0.9rem; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+.app-title { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.eyebrow { margin: 0 0 4px; color: var(--color-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; }
+.app-title h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; letter-spacing: -0.04em; }
+.version-badge { flex: 0 0 auto; padding: 6px 10px; border-radius: 999px; background: var(--color-alive-soft); color: var(--color-alive-dark); font-weight: 800; font-size: 0.85rem; }
+
+/* Branding Control Union */
+body {
+    background:
+        radial-gradient(circle at 8% 0%, rgba(0, 155, 235, 0.18), transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, var(--color-bg) 42%, #eef5fa 100%);
+}
+
+.app-header {
+    padding-top: 16px;
+}
+
+.app-title {
+    background: linear-gradient(135deg, var(--color-primary-dark), #10122b);
+    color: var(--color-surface);
+    padding: 18px 22px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 14px 34px rgba(27, 29, 67, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    min-width: 0;
+}
+
+.brand-logo {
+    width: clamp(180px, 24vw, 310px);
+    height: auto;
+    display: block;
+    flex: 0 0 auto;
+}
+
+.app-title .eyebrow {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.app-title h1 {
+    color: var(--color-surface);
+}
+
+.version-badge {
+    background: rgba(0, 155, 235, 0.18);
+    color: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.header-card, .manual-adjust-card, .stats-card, .actions, .summary, .checklist-card, .tab-nav {
+    border-top: 4px solid var(--color-primary);
+}
+
+.field input:focus, .field select:focus, textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(0, 155, 235, 0.16);
+}
+
+.counter-card.alive {
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,.28), transparent 34%),
+        linear-gradient(135deg, var(--color-primary), #0079bd);
+}
+
+.counter-card.dead {
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,.16), transparent 34%),
+        linear-gradient(135deg, var(--color-primary-dark), #0f1029);
+}
+
+.action-button.primary, .manual-button.plus {
+    background: var(--color-primary);
+    color: var(--color-surface);
+}
+
+.action-button.primary:hover {
+    background: #007fc2;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--color-primary), #5bc7ff);
+}
+
+thead th {
+    background: var(--color-primary-dark);
+}
+
+.header-card { display: grid; grid-template-columns: minmax(240px, 1.4fr) minmax(150px, .8fr) minmax(300px, 1.45fr) minmax(150px, .7fr) minmax(190px, .9fr) minmax(210px, .95fr); gap: var(--spacing-md); align-items: start; padding: var(--spacing-md); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: 0 8px 22px var(--color-shadow); }
+.field { display: flex; flex-direction: column; gap: var(--spacing-xs); min-width: 0; }
+.field-wide { min-width: 210px; }
+.field label { font-weight: 900; color: var(--color-text); font-size: 0.92rem; line-height: 1.28; }
+@media (min-width: 981px) {
+    .header-card > .field:not(.duration-field) label { min-height: 58px; display: flex; align-items: flex-start; }
+    .duration-field { grid-column: 1 / span 2; }
+}
+.field input, .field select { min-height: 52px; width: 100%; border: 2px solid transparent; border-radius: var(--radius-md); padding: 0 14px; background: var(--color-surface-soft); color: var(--color-text); font-size: 1rem; }
+.field input:focus, .field select:focus { border-color: var(--color-primary); background: #ffffff; }
+.field input[readonly] { color: var(--color-primary-dark); font-weight: 900; }
+.duration-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.duration-inputs input { text-align: center; }
+.duration-field { min-width: 190px; }
+
+.counter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-top: var(--spacing-md); }
+.counter-card { position: relative; min-height: 290px; overflow: hidden; border-radius: var(--radius-xl); box-shadow: 0 12px 28px var(--color-shadow); isolation: isolate; }
+.counter-card.alive { background: radial-gradient(circle at top left, rgba(255,255,255,.22), transparent 32%), linear-gradient(135deg, var(--color-alive), var(--color-alive-dark)); }
+.counter-card.dead { background: radial-gradient(circle at top left, rgba(255,255,255,.18), transparent 32%), linear-gradient(135deg, var(--color-dead), var(--color-dead-dark)); }
+.counter-content { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--spacing-lg); color: #fff; text-align: center; pointer-events: none; }
+.counter-content h2 { margin: 0; font-size: clamp(1.35rem, 4vw, 2rem); line-height: 1.15; text-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.counter-value { margin: 12px 0 4px; font-size: clamp(5rem, 17vw, 8rem); font-weight: 900; line-height: .95; letter-spacing: -.08em; text-shadow: 0 5px 18px rgba(0,0,0,.28); transition: transform .12s ease; }
+.counter-value.bump { transform: scale(1.08); }
+.counter-hint { margin: 8px 0 0; color: rgba(255,255,255,.86); font-size: .95rem; font-weight: 800; }
+.touch-zone { position: absolute; top: 0; bottom: 0; z-index: 3; width: 50%; border: 0; padding: 0; background: transparent; color: rgba(255,255,255,.86); cursor: pointer; }
+.touch-zone-left { left: 0; }
+.touch-zone-right { right: 0; }
+.touch-zone span { position: absolute; bottom: 22px; width: 64px; height: 64px; border-radius: 999px; display: grid; place-items: center; background: rgba(255,255,255,.96); color: inherit; font-size: 2.4rem; font-weight: 900; box-shadow: 0 6px 18px rgba(0,0,0,.22); transition: transform .12s ease; }
+.touch-zone-left span { left: 22px; color: #555; }
+.touch-zone-right span { right: 22px; }
+.alive .touch-zone-right span { color: var(--color-alive-dark); }
+.dead .touch-zone-right span { color: var(--color-dead-dark); }
+.touch-zone:hover { background: rgba(255,255,255,.06); }
+.touch-zone:active span { transform: scale(.92); }
+.counter-card.flash { animation: cardFlash .18s ease; }
+@keyframes cardFlash { 0% { filter: brightness(1); } 50% { filter: brightness(1.18); } 100% { filter: brightness(1); } }
+
+
+.manual-adjust-card { margin-top: var(--spacing-md); padding: var(--spacing-lg); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); box-shadow: 0 8px 22px var(--color-shadow); }
+.manual-adjust-grid { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(160px, .7fr) minmax(260px, 1fr); gap: var(--spacing-md); align-items: end; }
+.manual-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); }
+.manual-button { min-height: 52px; border: 0; border-radius: var(--radius-md); padding: 0 14px; cursor: pointer; font-weight: 900; box-shadow: 0 4px 14px rgba(0,0,0,.12); transition: transform .12s ease, filter .12s ease; }
+.manual-button:hover { filter: brightness(1.03); transform: translateY(-1px); }
+.manual-button:active { transform: scale(.98); }
+.manual-button.minus { background: #fff; color: #555; border: 2px solid rgba(0,0,0,.12); }
+.manual-button.plus { background: var(--color-primary); color: #fff; }
+
+.stats-card { margin-top: var(--spacing-md); padding: var(--spacing-lg); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); box-shadow: 0 8px 22px var(--color-shadow); }
+.section-title { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.section-title.compact { margin-bottom: var(--spacing-lg); }
+.section-title h2 { margin: 0; font-size: clamp(1.25rem, 4vw, 1.8rem); }
+.section-title p { margin: 0; color: var(--color-muted); font-weight: 700; }
+.main-kpi { text-align: center; max-width: 620px; margin: 0 auto var(--spacing-lg); }
+.kpi-label { display: block; color: var(--color-muted); font-weight: 900; }
+.main-kpi strong { display: block; margin: 8px 0 12px; color: var(--color-primary); font-size: clamp(3.6rem, 13vw, 6.5rem); font-weight: 900; line-height: 1; letter-spacing: -.06em; }
+.progress { width: 100%; height: 28px; overflow: hidden; border-radius: 999px; background: var(--color-dead-soft); border: 1px solid var(--color-border); }
+.progress-bar { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--color-alive), #66bb6a); transition: width .2s ease; }
+.total { display: block; margin-top: var(--spacing-md); color: var(--color-muted); font-size: 1.1rem; font-weight: 900; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-sm); }
+.kpi-card { min-height: 110px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; padding: 14px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-soft); }
+.kpi-card span { color: var(--color-muted); font-size: .88rem; font-weight: 900; }
+.kpi-card strong { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900; color: var(--color-text); }
+.kpi-card.highlight strong { color: var(--color-primary-dark); }
+.status-card.ok { background: var(--color-alive-soft); }
+.status-card.ko { background: #ffe7e4; }
+
+.actions { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-md); padding: var(--spacing-sm); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+.action-button { min-height: 54px; border: 0; border-radius: var(--radius-md); padding: 0 14px; cursor: pointer; font-weight: 900; font-size: .98rem; box-shadow: 0 4px 14px rgba(0,0,0,.12); transition: transform .12s ease, filter .12s ease; }
+.action-button:hover { filter: brightness(1.03); transform: translateY(-1px); }
+.action-button:active { transform: scale(.98); }
+.action-button.primary { background: var(--color-primary); color: #fff; }
+.action-button.primary:hover { background: var(--color-primary-dark); }
+.action-button.secondary { background: #fff; color: var(--color-text); }
+.action-button.danger { background: #fff; color: var(--color-danger); border: 2px solid rgba(179,38,30,.22); }
+
+.summary { margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); box-shadow: 0 8px 22px var(--color-shadow); }
+.table-wrapper { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+table { width: 100%; min-width: 1680px; border-collapse: collapse; background: #fff; }
+th, td { padding: 10px 8px; border-bottom: 1px solid var(--color-border); text-align: right; white-space: nowrap; }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3) { text-align: left; }
+thead th { background: #2f73d6; color: #fff; font-size: .78rem; line-height: 1.25; }
+tbody tr:nth-child(odd) { background: #e9f4ff; }
+tbody tr:nth-child(even) { background: #f6fbff; }
+tbody td.name-cell, tbody td.type-cell { background: #fff7bf; }
+tfoot th { background: var(--color-alive-soft); color: var(--color-alive-dark); font-weight: 900; }
+.empty-state { text-align: center !important; color: var(--color-muted); font-weight: 900; padding: 24px; background: #fff !important; }
+.delete-row-button { border: 0; border-radius: 999px; background: rgba(179,38,30,.12); color: var(--color-danger); width: 38px; height: 38px; cursor: pointer; font-weight: 900; }
+.status-icon { font-size: 1.25rem; }
+
+.toast { position: fixed; left: 50%; bottom: 92px; z-index: 100; transform: translateX(-50%) translateY(20px); min-width: min(90vw, 360px); padding: 14px 18px; border-radius: 999px; background: #172017; color: #fff; text-align: center; font-weight: 900; box-shadow: 0 12px 30px rgba(0,0,0,.28); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; }
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+@media (max-width: 760px) {
+    .brand-block {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .brand-logo {
+        width: min(250px, 82vw);
+    }
+
+    .app-title {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 1180px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 980px) { .manual-adjust-grid { grid-template-columns: 1fr 1fr; } .manual-buttons { grid-column: 1 / -1; } .header-card { grid-template-columns: 1fr 1fr; } .header-card > .field label { min-height: 0; } .duration-field { grid-column: auto; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } .actions { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { .manual-adjust-grid, .manual-buttons { grid-template-columns: 1fr; } .app-header, .app-main, .app-footer { width: min(100% - 20px, var(--max-width)); } .app-title { align-items: flex-start; flex-direction: column; gap: var(--spacing-sm); } .header-card, .counter-grid { grid-template-columns: 1fr; } .actions { grid-template-columns: 1fr 1fr; position: static; } .action-button { min-height: 48px; font-size: .9rem; padding: 0 10px; } .counter-card { min-height: 260px; } .section-title { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 500px) { .kpi-grid { grid-template-columns: 1fr; } .counter-card { min-height: 245px; } .touch-zone span { width: 58px; height: 58px; font-size: 2.1rem; } .touch-zone-left span { left: 16px; } .touch-zone-right span { right: 16px; } .counter-hint { font-size: .82rem; } }
+
+
+
+/* Tableau responsive : sur smartphone, chaque ligne devient une carte lisible. */
+@media (max-width: 760px) {
+    .summary { padding: var(--spacing-md); }
+    .table-wrapper { border: 0; overflow: visible; }
+    table { min-width: 0; background: transparent; }
+    thead { display: none; }
+    tbody, tfoot, tr, td, th { display: block; width: 100%; }
+    tbody tr, tfoot tr {
+        margin-bottom: var(--spacing-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--color-surface);
+        box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    }
+    tbody tr:nth-child(odd), tbody tr:nth-child(even) { background: var(--color-surface); }
+    th, td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--color-border);
+        text-align: right !important;
+        white-space: normal;
+    }
+    tbody td::before, tfoot th[data-label]::before {
+        content: attr(data-label);
+        color: var(--color-muted);
+        font-weight: 900;
+        text-align: left;
+        max-width: 52%;
+    }
+    tbody td.name-cell, tbody td.type-cell { background: var(--color-surface-soft); }
+    tbody td.empty-state { display: block; text-align: center !important; }
+    tbody td.empty-state::before { content: none; }
+    tfoot th[colspan] { display: block; text-align: center !important; background: var(--color-alive-soft); }
+    tfoot th:not([data-label]) { display: none; }
+    tfoot th[data-label] { background: var(--color-alive-soft); }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root { --color-bg: #0e1026; --color-surface: #151735; --color-surface-soft: #1d2047; --color-text: #FFFFFF; --color-muted: #c2c9df; --color-border: rgba(255,255,255,.14); --color-shadow: rgba(0,0,0,.38); --color-alive-soft: #07304a; --color-dead-soft: #242844; }
+    .field input, .field select { background: #111711; color: var(--color-text); }
+    .field input:focus, .field select:focus { background: #111711; }
+    .actions { background: var(--color-surface); }
+    .action-button.secondary, .action-button.danger, .manual-button.minus { background: #243024; color: var(--color-text); }
+    .action-button.danger { color: #ffb4ab; }
+    table { background: #1b241b; }
+    tbody tr:nth-child(odd), tbody tr:nth-child(even) { background: #1b241b; }
+    tbody td.name-cell, tbody td.type-cell { background: #2d2a1b; }
+    .empty-state { background: #1b241b !important; }
+    .status-card.ko { background: #3a1e1b; }
+    .toast { background: #eef7ee; color: #172017; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+
+/* =========================
+   ONGLET CHECKLIST TERRAIN - V2.8
+   ========================= */
+
+.tab-nav {
+    width: min(100% - 24px, var(--max-width));
+    margin: 8px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.tab-button {
+    min-height: 54px;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-soft);
+    color: var(--color-text);
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 1rem;
+    transition: transform .12s ease, background .12s ease, color .12s ease;
+}
+
+.tab-button.active {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.tab-button:hover {
+    transform: translateY(-1px);
+}
+
+.tab-panel[hidden] {
+    display: none !important;
+}
+
+.checklist-card {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 22px var(--color-shadow);
+}
+
+.checklist-title {
+    align-items: center;
+}
+
+.checklist-progress {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--color-alive-soft);
+    color: var(--color-alive-dark);
+    font-weight: 900;
+}
+
+.checklist-info {
+    margin-bottom: var(--spacing-md);
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-soft);
+    color: var(--color-muted);
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.checklist-list {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.check-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+    gap: var(--spacing-md);
+    align-items: center;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-soft);
+}
+
+.check-item.answered {
+    border-color: rgba(46, 125, 50, 0.35);
+    box-shadow: inset 4px 0 0 var(--color-primary);
+}
+
+.check-item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.check-index {
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 900;
+}
+
+.check-type {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 900;
+}
+
+.check-type.mandatory {
+    background: var(--color-alive-soft);
+    color: var(--color-alive-dark);
+}
+
+.check-type.conditional {
+    background: var(--color-dead-soft);
+    color: var(--color-dead-dark);
+}
+
+.check-item h3 {
+    margin: 0 0 8px;
+    font-size: 1.08rem;
+    line-height: 1.25;
+}
+
+.check-item p {
+    margin: 0;
+    color: var(--color-muted);
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.check-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+}
+
+
+.check-response {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.check-comment-label {
+    color: var(--color-muted);
+    font-size: .9rem;
+    font-weight: 900;
+}
+
+.check-comment {
+    width: 100%;
+    min-height: 86px;
+    resize: vertical;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    background: #fff;
+    color: var(--color-text);
+    font: inherit;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.check-comment:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.check-option {
+    min-height: 52px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: #fff;
+    cursor: pointer;
+    font-weight: 900;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+
+.check-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.check-option.selected {
+    border-color: var(--color-primary);
+    background: var(--color-alive-soft);
+    color: var(--color-alive-dark);
+}
+
+.check-option:hover {
+    transform: translateY(-1px);
+}
+
+.check-actions,
+.checklist-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+@media (max-width: 980px) {
+    .check-item {
+        grid-template-columns: 1fr;
+    }
+
+    .check-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .tab-nav {
+        width: min(100% - 20px, var(--max-width));
+        grid-template-columns: 1fr;
+    }
+
+    .checklist-card {
+        padding: var(--spacing-md);
+    }
+
+    .checklist-title {
+        align-items: flex-start;
+    }
+
+    .checklist-progress {
+        width: 100%;
+        text-align: center;
+    }
+
+    .check-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checklist-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .tab-nav,
+    .checklist-card {
+        background: var(--color-surface);
+    }
+
+    .tab-button,
+    .checklist-info,
+    .check-item {
+        background: var(--color-surface-soft);
+    }
+
+    .check-option,
+    .check-comment {
+        background: #243024;
+        color: var(--color-text);
+    }
+
+    .check-option.selected {
+        background: var(--color-alive-soft);
+        color: #eef7ee;
+    }
+
+    .check-type.conditional {
+        color: #f3d1c7;
+    }
+}
+
+
+/* Ajustements finaux thème Control Union */
+:root {
+    color-scheme: light dark;
+}
+
+.app-footer::before {
+    content: "";
+    display: inline-block;
+    width: 110px;
+    height: 25px;
+    background: url("assets/cu-logo-fullcolour.png") center / contain no-repeat;
+    vertical-align: middle;
+}
+
+.manual-button.plus, .action-button.primary {
+    background: var(--color-primary);
+}
+
+.tab-button.active {
+    background: var(--color-primary-dark);
+    color: var(--color-surface);
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline-color: rgba(0, 155, 235, 0.38);
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background:
+            radial-gradient(circle at 8% 0%, rgba(0, 155, 235, 0.22), transparent 30%),
+            linear-gradient(180deg, #090b1d 0%, #0e1026 100%);
+    }
+
+    .app-footer::before {
+        background-image: url("assets/cu-logo-whitetext.png");
+    }
+}
+
+/* =========================================================
+   V2.10 - Ajustements lisibilite et finition Control Union
+   Objectifs : contraste renforce, rendu plus fin, moins massif.
+   ========================================================= */
+
+:root {
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 22px;
+    --color-shadow: rgba(27, 29, 67, 0.10);
+}
+
+body {
+    background:
+        radial-gradient(circle at 10% 0%, rgba(0, 155, 235, 0.10), transparent 28%),
+        linear-gradient(180deg, #ffffff 0%, #f4f8fb 48%, #eef5fa 100%);
+}
+
+.app-title {
+    background: #1B1D43;
+    color: #FFFFFF;
+    padding: 14px 18px;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(27, 29, 67, 0.16);
+}
+
+.app-title h1,
+.app-title .eyebrow,
+.app-title .brand-block,
+.app-title .brand-block * {
+    color: #FFFFFF !important;
+}
+
+.app-title h1 {
+    font-size: clamp(1.55rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+.app-title .eyebrow {
+    opacity: 0.82;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+}
+
+.version-badge {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    font-weight: 700;
+}
+
+.brand-logo {
+    width: clamp(150px, 20vw, 250px);
+}
+
+.header-card,
+.manual-adjust-card,
+.stats-card,
+.actions,
+.summary,
+.checklist-card,
+.tab-nav {
+    border-top: 3px solid var(--color-primary);
+    box-shadow: 0 6px 18px var(--color-shadow);
+}
+
+.header-card {
+    padding: 14px;
+    gap: 14px;
+}
+
+.field label {
+    font-weight: 750;
+    font-size: 0.88rem;
+}
+
+.field input,
+.field select,
+.check-comment {
+    min-height: 48px;
+    border-radius: 12px;
+    background: #f7fafc;
+    border: 1px solid rgba(27, 29, 67, 0.08);
+    font-size: 0.98rem;
+}
+
+.field input[readonly] {
+    background: #eef8fe;
+    color: #0079bd;
+}
+
+.counter-grid {
+    gap: 14px;
+}
+
+.counter-card {
+    min-height: 245px;
+    border-radius: 22px;
+    box-shadow: 0 8px 22px rgba(27, 29, 67, 0.14);
+}
+
+.counter-content h2 {
+    font-size: clamp(1.18rem, 3vw, 1.65rem);
+    font-weight: 800;
+}
+
+.counter-value {
+    font-size: clamp(4.1rem, 13vw, 6.8rem);
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    text-shadow: 0 4px 14px rgba(0, 0, 0, 0.20);
+}
+
+.counter-hint {
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.touch-zone span {
+    width: 54px;
+    height: 54px;
+    bottom: 18px;
+    font-size: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.touch-zone-left span { left: 18px; }
+.touch-zone-right span { right: 18px; }
+
+.section-title h2,
+.stats-card h2,
+.checklist-card h2 {
+    font-weight: 800;
+    letter-spacing: -0.015em;
+}
+
+.section-title p,
+.total,
+.checklist-info,
+.check-item p {
+    font-weight: 600;
+}
+
+.main-kpi strong {
+    font-size: clamp(3rem, 9vw, 5.3rem);
+    font-weight: 800;
+}
+
+.kpi-grid {
+    gap: 10px;
+}
+
+.kpi-card {
+    min-height: 92px;
+    padding: 12px;
+    border-radius: 14px;
+}
+
+.kpi-card span {
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+.kpi-card strong {
+    font-size: clamp(1.2rem, 3vw, 1.65rem);
+    font-weight: 800;
+}
+
+.action-button,
+.manual-button,
+.tab-button {
+    min-height: 48px;
+    border-radius: 12px;
+    font-weight: 800;
+    box-shadow: 0 3px 10px rgba(27, 29, 67, 0.10);
+}
+
+.action-button.secondary,
+.manual-button.minus {
+    border: 1px solid rgba(27, 29, 67, 0.12);
+}
+
+.summary,
+.checklist-card,
+.stats-card,
+.manual-adjust-card {
+    padding: 18px;
+}
+
+thead th {
+    background: #1B1D43;
+    color: #FFFFFF;
+    font-weight: 800;
+}
+
+th,
+td {
+    padding: 9px 8px;
+}
+
+.check-item {
+    padding: 14px;
+    border-radius: 16px;
+    align-items: start;
+}
+
+.check-item h3 {
+    font-weight: 800;
+}
+
+.check-options {
+    gap: 8px;
+}
+
+.check-option {
+    min-height: 46px;
+    border-radius: 12px;
+    font-weight: 800;
+}
+
+.check-comment {
+    min-height: 72px;
+}
+
+.toast {
+    font-weight: 800;
+    border-radius: 18px;
+}
+
+@media (min-width: 981px) {
+    .header-card > .field:not(.duration-field) label {
+        min-height: 50px;
+    }
+}
+
+@media (max-width: 760px) {
+    .app-title {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .brand-logo {
+        width: min(220px, 76vw);
+    }
+
+    .counter-card {
+        min-height: 220px;
+    }
+
+    .actions {
+        gap: 8px;
+    }
+
+    .action-button {
+        min-height: 44px;
+        font-size: 0.86rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .counter-card {
+        min-height: 210px;
+    }
+
+    .touch-zone span {
+        width: 50px;
+        height: 50px;
+        font-size: 1.85rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #0e1026;
+        --color-surface: #151735;
+        --color-surface-soft: #1d2047;
+        --color-text: #FFFFFF;
+        --color-muted: #c7cde2;
+        --color-shadow: rgba(0, 0, 0, 0.26);
+    }
+
+    body {
+        background:
+            radial-gradient(circle at 8% 0%, rgba(0, 155, 235, 0.15), transparent 30%),
+            linear-gradient(180deg, #0b0d20 0%, #10132b 100%);
+    }
+
+    .app-title,
+    .app-title h1,
+    .app-title .eyebrow,
+    .app-title .brand-block,
+    .app-title .brand-block * {
+        color: #FFFFFF !important;
+    }
+
+    .field input,
+    .field select,
+    .check-comment {
+        background: #10132b;
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.10);
+    }
+
+    .field input[readonly] {
+        background: #0d2940;
+        color: #66cfff;
+    }
+
+    .action-button.secondary,
+    .action-button.danger,
+    .manual-button.minus,
+    .check-option {
+        background: #1d2047;
+        color: #FFFFFF;
+    }
+
+    .check-option.selected {
+        color: #FFFFFF;
+    }
+}
+
+/* =========================================================
+   V2.11 - Audit lisibilite texte / fond
+   Priorite : contraste AA, lisibilite smartphone et terrain.
+   ========================================================= */
+
+:root {
+    --cu-light-blue: #009BEB;
+    --cu-light-blue-700: #0079bd;
+    --cu-dark-blue: #1B1D43;
+    --cu-dark-blue-900: #10122b;
+    --cu-white: #FFFFFF;
+
+    --color-text: #1B1D43;
+    --color-muted: #46566f;
+    --color-primary: #009BEB;
+    --color-primary-dark: #1B1D43;
+    --color-alive: #0079bd;
+    --color-alive-dark: #1B1D43;
+    --color-dead: #1B1D43;
+    --color-dead-dark: #10122b;
+    --color-alive-soft: #e6f6fe;
+    --color-dead-soft: #eef1f8;
+}
+
+/* En-tete : texte toujours blanc sur bleu fonce CU. */
+.app-title,
+.app-title h1,
+.app-title .eyebrow,
+.app-title .brand-block,
+.app-title .brand-block *,
+.version-badge {
+    color: #FFFFFF !important;
+}
+
+/* Bleu CU clair : jamais utilise avec texte blanc pour les petits libelles.
+   Le contraste est insuffisant ; texte bleu fonce obligatoire. */
+.action-button.primary,
+.manual-button.plus {
+    background: var(--cu-light-blue);
+    color: var(--cu-dark-blue) !important;
+    border: 1px solid rgba(27, 29, 67, 0.18);
+}
+
+.action-button.primary:hover,
+.manual-button.plus:hover {
+    background: #12aaf7;
+}
+
+/* Les boutons secondaires restent tres lisibles. */
+.action-button.secondary,
+.manual-button.minus {
+    background: #FFFFFF;
+    color: var(--cu-dark-blue) !important;
+    border: 1px solid rgba(27, 29, 67, 0.16);
+}
+
+.action-button.danger {
+    background: #FFFFFF;
+    color: #8f1d17 !important;
+    border: 1px solid rgba(143, 29, 23, 0.28);
+}
+
+/* Cartes compteurs : gradient assombri pour garantir le blanc lisible. */
+.counter-card.alive {
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 34%),
+        linear-gradient(135deg, #0079bd 0%, #1B1D43 100%);
+}
+
+.counter-card.dead {
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 34%),
+        linear-gradient(135deg, #1B1D43 0%, #10122b 100%);
+}
+
+.counter-content h2,
+.counter-value,
+.counter-hint {
+    color: #FFFFFF !important;
+}
+
+.counter-hint {
+    opacity: 0.92;
+}
+
+.touch-zone span {
+    background: #FFFFFF;
+    color: var(--cu-dark-blue) !important;
+}
+
+/* Champs et cartes KPI : fonds clairs + texte fonce, sans gris trop pale. */
+.field label,
+.kpi-card strong,
+.check-item h3,
+.section-title h2,
+.stats-card h2 {
+    color: var(--cu-dark-blue);
+}
+
+.field input,
+.field select,
+.check-comment {
+    background: #FFFFFF;
+    color: var(--cu-dark-blue);
+    border: 1px solid rgba(27, 29, 67, 0.18);
+}
+
+.field input::placeholder,
+.check-comment::placeholder {
+    color: #68758c;
+    opacity: 1;
+}
+
+.field input[readonly] {
+    background: #e6f6fe;
+    color: #0b5f95;
+}
+
+.kpi-label,
+.kpi-card span,
+.section-title p,
+.total,
+.checklist-info,
+.check-item p {
+    color: #46566f;
+}
+
+.kpi-card.highlight strong,
+.main-kpi strong {
+    color: #0b5f95;
+}
+
+.status-card.ok {
+    background: #e6f6fe;
+}
+
+.status-card.ko {
+    background: #fff0ee;
+}
+
+.status-card.ok strong,
+.status-card.ko strong {
+    color: var(--cu-dark-blue);
+}
+
+/* Tableau : contraste renforce sans perdre la lecture type Excel. */
+thead th {
+    background: var(--cu-dark-blue) !important;
+    color: #FFFFFF !important;
+}
+
+tbody tr:nth-child(odd) {
+    background: #eef8fe;
+}
+
+tbody tr:nth-child(even) {
+    background: #FFFFFF;
+}
+
+tbody td,
+tbody th {
+    color: var(--cu-dark-blue);
+}
+
+tbody td.name-cell,
+tbody td.type-cell {
+    background: #fff7bf;
+    color: var(--cu-dark-blue);
+}
+
+tfoot th {
+    background: #e6f6fe !important;
+    color: var(--cu-dark-blue) !important;
+}
+
+.empty-state {
+    color: #46566f !important;
+    background: #FFFFFF !important;
+}
+
+.delete-row-button {
+    color: #8f1d17;
+    background: #fff0ee;
+}
+
+/* Onglets et checklist : etats selectionnes lisibles. */
+.tab-button.active {
+    background: var(--cu-dark-blue);
+    color: #FFFFFF !important;
+}
+
+.tab-button:not(.active) {
+    background: #FFFFFF;
+    color: var(--cu-dark-blue);
+}
+
+.check-type-badge,
+.checklist-progress {
+    color: var(--cu-dark-blue);
+    background: #e6f6fe;
+}
+
+.check-option {
+    background: #FFFFFF;
+    color: var(--cu-dark-blue) !important;
+    border-color: rgba(27, 29, 67, 0.18);
+}
+
+.check-option.selected {
+    background: #e6f6fe;
+    color: var(--cu-dark-blue) !important;
+    border-color: var(--cu-light-blue);
+}
+
+/* Mode sombre : aucune couleur foncee sur fond fonce. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #0e1026;
+        --color-surface: #151735;
+        --color-surface-soft: #1d2047;
+        --color-text: #FFFFFF;
+        --color-muted: #d5dbef;
+        --color-alive-soft: #0d2940;
+        --color-dead-soft: #242844;
+    }
+
+    .header-card,
+    .manual-adjust-card,
+    .stats-card,
+    .actions,
+    .summary,
+    .checklist-card,
+    .tab-nav,
+    .kpi-card,
+    .check-item {
+        background: var(--color-surface);
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .field label,
+    .kpi-card strong,
+    .check-item h3,
+    .section-title h2,
+    .stats-card h2,
+    tbody td,
+    tbody th {
+        color: #FFFFFF;
+    }
+
+    .kpi-label,
+    .kpi-card span,
+    .section-title p,
+    .total,
+    .checklist-info,
+    .check-item p {
+        color: #d5dbef;
+    }
+
+    .field input,
+    .field select,
+    .check-comment {
+        background: #10132b;
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .field input::placeholder,
+    .check-comment::placeholder {
+        color: #aeb8d2;
+    }
+
+    .field input[readonly] {
+        background: #0d2940;
+        color: #8bdcff;
+    }
+
+    .action-button.primary,
+    .manual-button.plus {
+        background: #009BEB;
+        color: #1B1D43 !important;
+    }
+
+    .action-button.secondary,
+    .manual-button.minus,
+    .tab-button:not(.active),
+    .check-option {
+        background: #1d2047;
+        color: #FFFFFF !important;
+        border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .action-button.danger {
+        background: #2b1b24;
+        color: #ffb4ab !important;
+        border-color: rgba(255, 180, 171, 0.25);
+    }
+
+    .main-kpi strong,
+    .kpi-card.highlight strong {
+        color: #8bdcff;
+    }
+
+    .status-card.ok,
+    .check-option.selected,
+    .check-type-badge,
+    .checklist-progress {
+        background: #0d2940;
+        color: #FFFFFF !important;
+        border-color: rgba(0, 155, 235, 0.45);
+    }
+
+    .status-card.ko {
+        background: #3a1e1b;
+    }
+
+    .status-card.ok strong,
+    .status-card.ko strong {
+        color: #FFFFFF;
+    }
+
+    table {
+        background: transparent;
+    }
+
+    tbody tr:nth-child(odd),
+    tbody tr:nth-child(even) {
+        background: #151735;
+    }
+
+    tbody td.name-cell,
+    tbody td.type-cell {
+        background: #232649;
+        color: #FFFFFF;
+    }
+
+    tfoot th,
+    tfoot th[colspan],
+    tfoot th[data-label] {
+        background: #0d2940 !important;
+        color: #FFFFFF !important;
+    }
+
+    .empty-state {
+        background: #151735 !important;
+        color: #d5dbef !important;
+    }
+
+    .delete-row-button {
+        background: #3a1e1b;
+        color: #ffb4ab;
+    }
+}
+
+/* =========================================================
+   V2.12 - Layout sobre inspire Control Union
+   Objectif : moins futuriste, plus corporate/editorial.
+   ========================================================= */
+
+:root {
+    --color-bg: #f5f7fa;
+    --color-surface: #ffffff;
+    --color-surface-soft: #f7f9fc;
+    --color-text: #1B1D43;
+    --color-muted: #5c6685;
+    --color-primary: #009BEB;
+    --color-primary-dark: #1B1D43;
+    --color-border: #dfe5ee;
+    --color-shadow: rgba(27, 29, 67, 0.07);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 14px;
+}
+
+html {
+    background: #f5f7fa;
+}
+
+body {
+    background: #f5f7fa !important;
+    color: var(--color-text);
+}
+
+.app-header,
+.app-main,
+.app-footer,
+.tab-nav {
+    width: min(100% - 32px, var(--max-width));
+}
+
+.app-header {
+    padding-top: 18px;
+}
+
+.app-title {
+    background: #ffffff !important;
+    color: var(--color-text) !important;
+    border: 1px solid var(--color-border);
+    border-top: 5px solid var(--color-primary);
+    border-radius: 0;
+    box-shadow: 0 2px 10px var(--color-shadow);
+    padding: 18px 22px;
+}
+
+.brand-block {
+    gap: 26px;
+}
+
+.brand-logo {
+    width: clamp(170px, 18vw, 260px);
+    max-height: 70px;
+    object-fit: contain;
+}
+
+.app-title h1,
+.app-title .eyebrow,
+.app-title .brand-block,
+.app-title .brand-block * {
+    color: var(--color-text) !important;
+}
+
+.app-title h1 {
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    font-weight: 720;
+    letter-spacing: -0.01em;
+}
+
+.app-title .eyebrow {
+    color: var(--color-muted) !important;
+    opacity: 1;
+    font-weight: 680;
+    letter-spacing: 0.08em;
+}
+
+.version-badge {
+    background: #f0f8fe;
+    color: var(--color-primary-dark) !important;
+    border: 1px solid #cbeeff;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.header-card,
+.manual-adjust-card,
+.stats-card,
+.actions,
+.summary,
+.checklist-card,
+.tab-nav {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-top: 0;
+    border-radius: 0;
+    box-shadow: 0 2px 10px var(--color-shadow);
+}
+
+.header-card {
+    margin-top: 14px;
+    padding: 18px;
+}
+
+.field label,
+.check-comment-label,
+.kpi-label {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.field input,
+.field select,
+.check-comment {
+    background: #ffffff;
+    border: 1px solid #cfd8e6;
+    border-radius: 4px;
+    color: var(--color-text);
+    min-height: 46px;
+}
+
+.field input::placeholder {
+    color: #7d86a0;
+}
+
+.field input:focus,
+.field select:focus,
+.check-comment:focus,
+textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 155, 235, 0.16);
+    background: #ffffff;
+}
+
+.field input[readonly] {
+    background: #eef8fe;
+    color: var(--color-primary-dark);
+}
+
+.tab-nav {
+    margin-top: 14px;
+    padding: 0;
+    gap: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tab-button {
+    background: #ffffff;
+    color: var(--color-primary-dark);
+    border-radius: 0;
+    box-shadow: none;
+    border-right: 1px solid var(--color-border);
+    min-height: 50px;
+}
+
+.tab-button:last-child {
+    border-right: 0;
+}
+
+.tab-button.active {
+    background: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.tab-button:hover {
+    transform: none;
+    background: #f2f8fc;
+}
+
+.tab-button.active:hover {
+    background: var(--color-primary-dark);
+}
+
+.counter-grid {
+    gap: 16px;
+}
+
+.counter-card {
+    border-radius: 0;
+    min-height: 225px;
+    box-shadow: 0 2px 10px var(--color-shadow);
+    border: 1px solid var(--color-border);
+}
+
+.counter-card.alive {
+    background: #ffffff !important;
+    border-top: 6px solid var(--color-primary);
+}
+
+.counter-card.dead {
+    background: #ffffff !important;
+    border-top: 6px solid var(--color-primary-dark);
+}
+
+.counter-content {
+    color: var(--color-text);
+}
+
+.counter-content h2 {
+    color: var(--color-text);
+    text-shadow: none;
+    font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+    font-weight: 720;
+}
+
+.counter-value {
+    color: var(--color-primary-dark);
+    text-shadow: none;
+    font-size: clamp(4.2rem, 12vw, 6.2rem);
+    font-weight: 760;
+}
+
+.counter-card.alive .counter-value {
+    color: var(--color-primary);
+}
+
+.counter-hint {
+    color: var(--color-muted);
+    font-weight: 600;
+}
+
+.touch-zone {
+    color: var(--color-primary-dark);
+}
+
+.touch-zone:hover {
+    background: rgba(0, 155, 235, 0.05);
+}
+
+.touch-zone span {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 7px rgba(27, 29, 67, 0.12);
+    width: 52px;
+    height: 52px;
+    color: var(--color-primary-dark) !important;
+}
+
+.counter-card.alive .touch-zone-right span {
+    color: var(--color-primary) !important;
+}
+
+.counter-card.dead .touch-zone-right span {
+    color: var(--color-primary-dark) !important;
+}
+
+.manual-adjust-card,
+.stats-card,
+.summary,
+.checklist-card {
+    margin-top: 18px;
+    padding: 20px;
+}
+
+.section-title {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 12px;
+}
+
+.section-title h2,
+.stats-card h2,
+.checklist-card h2,
+.check-item h3 {
+    color: var(--color-primary-dark);
+    font-weight: 720;
+}
+
+.section-title p,
+.total,
+.checklist-info,
+.check-item p {
+    color: var(--color-muted);
+    font-weight: 500;
+}
+
+.manual-adjust-grid {
+    align-items: end;
+}
+
+.manual-button,
+.action-button,
+.check-option {
+    border-radius: 4px;
+    box-shadow: none;
+    font-weight: 700;
+}
+
+.manual-button:hover,
+.action-button:hover,
+.check-option:hover {
+    transform: none;
+}
+
+.manual-button.plus,
+.action-button.primary {
+    background: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.manual-button.plus:hover,
+.action-button.primary:hover {
+    background: #25285a;
+}
+
+.manual-button.minus,
+.action-button.secondary,
+.action-button.danger {
+    background: #ffffff;
+    color: var(--color-primary-dark);
+    border: 1px solid #cfd8e6;
+}
+
+.action-button.danger {
+    color: #9c1f18;
+    border-color: #f0c6c2;
+}
+
+.actions {
+    padding: 14px;
+    gap: 10px;
+}
+
+.main-kpi strong {
+    color: var(--color-primary-dark);
+    font-size: clamp(2.8rem, 7vw, 4.8rem);
+    font-weight: 760;
+}
+
+.progress {
+    background: #e8edf4;
+    border-radius: 4px;
+    height: 18px;
+}
+
+.progress-bar {
+    background: var(--color-primary);
+    border-radius: 4px;
+}
+
+.kpi-grid {
+    gap: 12px;
+}
+
+.kpi-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #cfd8e6;
+    border-radius: 0;
+    min-height: 92px;
+}
+
+.kpi-card.highlight {
+    border-left-color: var(--color-primary);
+    background: #f6fbff;
+}
+
+.kpi-card.status-card.ok {
+    background: #f5fbf7;
+    border-left-color: #2e7d32;
+}
+
+.kpi-card.status-card.ko {
+    background: #fff7f6;
+    border-left-color: #b3261e;
+}
+
+.kpi-card span {
+    color: var(--color-muted);
+    font-weight: 650;
+}
+
+.kpi-card strong,
+.kpi-card.highlight strong {
+    color: var(--color-primary-dark);
+}
+
+table {
+    background: #ffffff;
+}
+
+thead th {
+    background: var(--color-primary-dark);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+tbody tr:nth-child(odd),
+tbody tr:nth-child(even) {
+    background: #ffffff;
+}
+
+tbody tr:hover {
+    background: #f6fbff;
+}
+
+tbody td.name-cell,
+tbody td.type-cell {
+    background: #f9fbfd;
+}
+
+tfoot th {
+    background: #edf7fe;
+    color: var(--color-primary-dark);
+}
+
+.empty-state {
+    background: #ffffff !important;
+    color: var(--color-muted);
+}
+
+.delete-row-button {
+    border-radius: 4px;
+    background: #fff5f4;
+    color: #9c1f18;
+    border: 1px solid #f0c6c2;
+}
+
+.checklist-info {
+    background: #f7f9fc;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0;
+}
+
+.check-item {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+}
+
+.check-item.answered {
+    border-color: var(--color-border);
+    box-shadow: inset 4px 0 0 var(--color-primary);
+}
+
+.check-index {
+    background: var(--color-primary-dark);
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.check-type {
+    border-radius: 4px;
+}
+
+.check-type.mandatory {
+    background: #edf7fe;
+    color: var(--color-primary-dark);
+}
+
+.check-type.conditional {
+    background: #f0f2f6;
+    color: var(--color-primary-dark);
+}
+
+.check-option {
+    background: #ffffff;
+    color: var(--color-primary-dark);
+    border: 1px solid #cfd8e6;
+}
+
+.check-option.selected {
+    background: #edf7fe;
+    color: var(--color-primary-dark);
+    border-color: var(--color-primary);
+}
+
+.check-comment {
+    background: #ffffff;
+}
+
+.checklist-progress {
+    background: #edf7fe;
+    color: var(--color-primary-dark);
+    border-radius: 4px;
+}
+
+.toast {
+    background: var(--color-primary-dark);
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.app-footer {
+    border-top: 1px solid var(--color-border);
+    margin-top: 10px;
+    color: var(--color-muted);
+}
+
+.app-footer::before {
+    width: 96px;
+    height: 22px;
+}
+
+@media (max-width: 760px) {
+    .app-header,
+    .app-main,
+    .app-footer,
+    .tab-nav {
+        width: min(100% - 20px, var(--max-width));
+    }
+
+    .app-title {
+        padding: 16px;
+    }
+
+    .brand-block {
+        gap: 12px;
+    }
+
+    .brand-logo {
+        width: min(220px, 72vw);
+    }
+
+    .header-card,
+    .manual-adjust-card,
+    .stats-card,
+    .summary,
+    .checklist-card {
+        padding: 16px;
+    }
+
+    .tab-nav {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-button {
+        border-right: 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .tab-button:last-child {
+        border-bottom: 0;
+    }
+
+    .counter-card {
+        min-height: 205px;
+    }
+
+    .actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #f5f7fa;
+        --color-surface: #ffffff;
+        --color-surface-soft: #f7f9fc;
+        --color-text: #1B1D43;
+        --color-muted: #5c6685;
+        --color-border: #dfe5ee;
+        --color-shadow: rgba(27, 29, 67, 0.07);
+    }
+
+    body {
+        background: #f5f7fa !important;
+        color: var(--color-text);
+    }
+
+    .field input,
+    .field select,
+    .check-comment,
+    .check-option,
+    .action-button.secondary,
+    .action-button.danger,
+    .manual-button.minus,
+    .tab-button,
+    .checklist-info,
+    .check-item,
+    .tab-nav,
+    .checklist-card,
+    .header-card,
+    .manual-adjust-card,
+    .stats-card,
+    .actions,
+    .summary {
+        background: #ffffff;
+        color: var(--color-text);
+    }
+
+    table,
+    tbody tr:nth-child(odd),
+    tbody tr:nth-child(even),
+    .empty-state {
+        background: #ffffff !important;
+        color: var(--color-text);
+    }
+
+    .app-footer::before {
+        background-image: url("assets/cu-logo-fullcolour.png");
+    }
+}
+
+
+/* =========================================================
+   V2.13 - Audit final lisibilite texte / fond
+   Objectif : conserver un layout sobre Control Union tout en
+   supprimant les couples texte/fond limites.
+   ========================================================= */
+
+:root {
+    --cu-light-blue: #009BEB;
+    --cu-light-blue-readable: #006FAE;
+    --cu-dark-blue: #1B1D43;
+    --cu-white: #FFFFFF;
+    --color-bg: #F5F7FA;
+    --color-surface: #FFFFFF;
+    --color-surface-soft: #F7F9FC;
+    --color-text: #1B1D43;
+    --color-muted: #4E5B78;
+    --color-border: #D8E0EC;
+    --color-primary: #009BEB;
+    --color-primary-readable: #006FAE;
+    --color-primary-dark: #1B1D43;
+    --color-danger: #8F1D17;
+    --color-success: #1B6B3A;
+    --color-warning-bg: #FFF7D6;
+    --color-info-bg: #EDF7FE;
+}
+
+/* Base : lisibilite prioritaire. */
+body,
+.app-title,
+.header-card,
+.manual-adjust-card,
+.stats-card,
+.actions,
+.summary,
+.checklist-card,
+.tab-nav,
+.kpi-card,
+.check-item,
+table,
+tbody tr,
+.empty-state {
+    color: var(--color-text);
+}
+
+/* Logo/header : titre fonce sur blanc, proche d'un site corporate. */
+.app-title {
+    background: var(--cu-white) !important;
+    color: var(--cu-dark-blue) !important;
+    border-top-color: var(--cu-light-blue);
+}
+
+.app-title h1,
+.app-title .brand-block,
+.app-title .brand-block * {
+    color: var(--cu-dark-blue) !important;
+}
+
+.app-title .eyebrow {
+    color: var(--color-muted) !important;
+}
+
+.version-badge {
+    background: var(--color-info-bg) !important;
+    color: var(--cu-dark-blue) !important;
+    border-color: #B8E7FC !important;
+}
+
+/* Le bleu clair CU n'est plus utilise comme couleur de texte sur fond blanc.
+   Il est garde en accent, mais les chiffres/lien importants passent en bleu lisible. */
+.counter-card.alive .counter-value,
+.main-kpi strong,
+.kpi-card.highlight strong,
+.field input[readonly] {
+    color: var(--color-primary-readable) !important;
+}
+
+.counter-card.dead .counter-value,
+.counter-content h2,
+.counter-hint,
+.kpi-card strong,
+.status-card strong,
+.check-item h3,
+.section-title h2,
+.stats-card h2,
+.checklist-card h2,
+.field label,
+.check-comment-label,
+.kpi-label {
+    color: var(--cu-dark-blue) !important;
+}
+
+.counter-hint,
+.kpi-card span,
+.section-title p,
+.total,
+.checklist-info,
+.check-item p,
+tbody td::before,
+tfoot th[data-label]::before {
+    color: var(--color-muted) !important;
+}
+
+/* Boutons : fonds tres contrastes et etats hover non ambigus. */
+.action-button.primary,
+.manual-button.plus,
+.tab-button.active {
+    background: var(--cu-dark-blue) !important;
+    color: var(--cu-white) !important;
+    border-color: var(--cu-dark-blue) !important;
+}
+
+.action-button.primary:hover,
+.manual-button.plus:hover,
+.tab-button.active:hover {
+    background: #25285A !important;
+    color: var(--cu-white) !important;
+}
+
+.action-button.secondary,
+.manual-button.minus,
+.tab-button:not(.active),
+.check-option {
+    background: var(--cu-white) !important;
+    color: var(--cu-dark-blue) !important;
+    border: 1px solid #C8D2E1 !important;
+}
+
+.action-button.secondary:hover,
+.manual-button.minus:hover,
+.tab-button:not(.active):hover,
+.check-option:hover {
+    background: #F3F7FB !important;
+    color: var(--cu-dark-blue) !important;
+}
+
+.action-button.danger,
+.delete-row-button {
+    background: #FFF5F4 !important;
+    color: var(--color-danger) !important;
+    border: 1px solid #E9BDB8 !important;
+}
+
+/* Cartes de comptage : fond blanc, accents sobres, pas de texte clair sur fond clair. */
+.counter-card.alive,
+.counter-card.dead {
+    background: var(--cu-white) !important;
+}
+
+.counter-card.alive {
+    border-top-color: var(--cu-light-blue) !important;
+}
+
+.counter-card.dead {
+    border-top-color: var(--cu-dark-blue) !important;
+}
+
+.touch-zone span {
+    background: var(--cu-white) !important;
+    color: var(--cu-dark-blue) !important;
+    border-color: #C8D2E1 !important;
+}
+
+.counter-card.alive .touch-zone-right span {
+    color: var(--color-primary-readable) !important;
+}
+
+/* Champs : placeholders et valeurs toujours lisibles. */
+.field input,
+.field select,
+.check-comment {
+    background: var(--cu-white) !important;
+    color: var(--cu-dark-blue) !important;
+    border-color: #C8D2E1 !important;
+}
+
+.field input::placeholder,
+.check-comment::placeholder {
+    color: #66738D !important;
+    opacity: 1 !important;
+}
+
+.field input[readonly] {
+    background: #EDF7FE !important;
+    border-color: #B8E7FC !important;
+}
+
+/* KPI : statuts visuellement distincts mais textes fonces. */
+.kpi-card {
+    background: var(--cu-white) !important;
+    border-color: var(--color-border) !important;
+}
+
+.kpi-card.highlight {
+    background: #F6FBFF !important;
+    border-left-color: var(--cu-light-blue) !important;
+}
+
+.status-card.ok {
+    background: #F2FAF5 !important;
+    border-left-color: var(--color-success) !important;
+}
+
+.status-card.ko {
+    background: #FFF5F4 !important;
+    border-left-color: var(--color-danger) !important;
+}
+
+.status-card.ok strong,
+.status-card.ko strong {
+    color: var(--cu-dark-blue) !important;
+}
+
+/* Tableau : en-tete fonce, cellules claires, badges/colonnes visibles. */
+thead th {
+    background: var(--cu-dark-blue) !important;
+    color: var(--cu-white) !important;
+}
+
+tbody tr:nth-child(odd),
+tbody tr:nth-child(even),
+tbody td,
+tbody th {
+    background: var(--cu-white);
+    color: var(--cu-dark-blue) !important;
+}
+
+tbody tr:hover td,
+tbody tr:hover th {
+    background: #F6FBFF;
+}
+
+tbody td.name-cell,
+tbody td.type-cell {
+    background: #F9FBFD !important;
+    color: var(--cu-dark-blue) !important;
+}
+
+tfoot th,
+tfoot th[colspan],
+tfoot th[data-label] {
+    background: #EDF7FE !important;
+    color: var(--cu-dark-blue) !important;
+}
+
+.empty-state {
+    background: var(--cu-white) !important;
+    color: var(--color-muted) !important;
+}
+
+/* Checklist : tous les boutons Oui/Non/NA/Non audite restent lisibles. */
+.checklist-info {
+    background: #F7F9FC !important;
+    color: var(--color-muted) !important;
+}
+
+.check-index {
+    background: var(--cu-dark-blue) !important;
+    color: var(--cu-white) !important;
+}
+
+.check-type.mandatory,
+.check-type.conditional,
+.checklist-progress,
+.check-option.selected {
+    background: #EDF7FE !important;
+    color: var(--cu-dark-blue) !important;
+    border-color: #B8E7FC !important;
+}
+
+.check-item.answered {
+    box-shadow: inset 4px 0 0 var(--color-primary-readable);
+}
+
+/* Mode sombre systeme : l'app conserve volontairement le theme clair pour eviter
+   les inversions de contraste et rester coherente avec l'identite CU. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #F5F7FA;
+        --color-surface: #FFFFFF;
+        --color-surface-soft: #F7F9FC;
+        --color-text: #1B1D43;
+        --color-muted: #4E5B78;
+        --color-border: #D8E0EC;
+        --color-shadow: rgba(27, 29, 67, 0.07);
+    }
+
+    html,
+    body {
+        background: #F5F7FA !important;
+        color: var(--cu-dark-blue) !important;
+    }
+
+    .app-title,
+    .header-card,
+    .manual-adjust-card,
+    .stats-card,
+    .actions,
+    .summary,
+    .checklist-card,
+    .tab-nav,
+    .kpi-card,
+    .check-item,
+    table,
+    tbody tr,
+    tbody td,
+    tbody th,
+    .empty-state {
+        background: #FFFFFF !important;
+        color: var(--cu-dark-blue) !important;
+    }
+
+    .app-footer::before {
+        background-image: url("assets/cu-logo-fullcolour.png") !important;
+    }
+}

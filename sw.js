@@ -1,0 +1,31 @@
+const CACHE_NAME = 'inventaire-forestier-v2-13-0';
+const FILES = [
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/cu-logo-fullcolour.png',
+  './assets/cu-logo-whitetext.png',
+  './assets/cu-logo-black.png',
+  './assets/cu-logo-white.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => Promise.all(keys.map((key) => key !== CACHE_NAME ? caches.delete(key) : null)))
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+});
