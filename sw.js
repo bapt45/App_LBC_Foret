@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inventaire-forestier-v2-13-0';
+const CACHE_NAME = 'inventaire-forestier-v2-14-0';
 const FILES = [
   './',
   './index.html',

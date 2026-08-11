@@ -11,6 +11,7 @@
     --color-dead-dark: #10122b;
     --color-dead-soft: #e9ecf6;
     --color-primary: #009BEB;
+    --color-accent: #009BEB;
     --color-primary-dark: #1B1D43;
     --color-danger: #b3261e;
     --color-border: rgba(27, 29, 67, 0.14);
@@ -2214,5 +2215,217 @@ tfoot th[data-label] {
 
     .app-footer::before {
         background-image: url("assets/cu-logo-fullcolour.png") !important;
+    }
+}
+
+/* =========================================================
+   V2.14 - Gestion multi-projets
+   ========================================================= */
+
+body.home-mode .project-workspace,
+body.home-mode .header-card,
+body.home-mode .project-context {
+    display: none !important;
+}
+
+body.project-mode .project-home {
+    display: none !important;
+}
+
+.project-context {
+    width: min(100% - 24px, var(--max-width));
+    margin: 14px auto 0;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-accent);
+    border-radius: 10px;
+}
+
+.context-button {
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    color: var(--color-primary);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.context-label {
+    display: block;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+#activeProjectName {
+    display: block;
+    color: var(--color-primary);
+    font-size: 1.08rem;
+}
+
+.project-home {
+    width: min(100% - 24px, var(--max-width));
+    margin: 24px auto 40px;
+}
+
+.home-hero {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-accent);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 18px;
+}
+
+.home-hero h2 {
+    margin: 4px 0 8px;
+    color: var(--color-primary);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+}
+
+.home-hero p:last-child {
+    margin-bottom: 0;
+    color: var(--color-muted);
+    max-width: 680px;
+}
+
+.project-create-card,
+.project-list-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 18px;
+}
+
+.project-create-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+}
+
+.projects-list {
+    display: grid;
+    gap: 12px;
+}
+
+.project-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.project-card h3 {
+    margin: 0 0 4px;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.project-card p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.92rem;
+}
+
+.project-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.project-open-button,
+.project-delete-button,
+.edit-row-button {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #ffffff;
+}
+
+.project-open-button,
+.edit-row-button {
+    color: var(--color-primary);
+}
+
+.project-delete-button {
+    color: var(--color-danger);
+}
+
+.edit-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f3fbff;
+    border: 1px solid rgba(0, 155, 235, 0.35);
+    border-left: 5px solid var(--color-accent);
+    border-radius: 10px;
+    color: var(--color-primary);
+    padding: 14px 16px;
+    margin: 0 0 16px;
+}
+
+.edit-notice span {
+    color: var(--color-muted);
+    flex: 1;
+}
+
+.edit-notice button {
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    color: var(--color-primary);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.action-cell {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+    .project-context,
+    .project-create-card,
+    .project-card,
+    .edit-notice {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .project-create-card {
+        display: grid;
+    }
+
+    .project-card-actions,
+    .action-cell {
+        justify-content: stretch;
+    }
+
+    .project-open-button,
+    .project-delete-button,
+    .edit-row-button,
+    .delete-row-button {
+        flex: 1;
+        min-height: 42px;
     }
 }

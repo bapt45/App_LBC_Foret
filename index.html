@@ -19,8 +19,16 @@
                     <h1>🌲 Inventaire forestier</h1>
                 </div>
             </div>
-            <span class="version-badge">v2.13.0</span>
+            <span class="version-badge">v2.14.0</span>
         </div>
+
+        <section id="projectContext" class="project-context" hidden>
+            <button id="backToProjects" class="context-button" type="button">← Projets</button>
+            <div>
+                <span class="context-label">Projet actif</span>
+                <strong id="activeProjectName">Aucun projet sélectionné</strong>
+            </div>
+        </section>
 
         <section class="header-card" aria-label="Caractéristiques du tènement">
             <div class="field field-wide">
@@ -68,13 +76,42 @@
         </section>
     </header>
 
-    <nav class="tab-nav" aria-label="Navigation principale">
+    <section id="projectHome" class="project-home" aria-label="Accueil des projets">
+        <div class="home-hero">
+            <p class="eyebrow">Gestion des audits</p>
+            <h2>Choisir ou créer un projet</h2>
+            <p>Chaque projet dispose de sa propre checklist terrain, de ses tènements et de ses exports CSV.</p>
+        </div>
+
+        <div class="project-create-card">
+            <div class="field">
+                <label for="newProjectName">Nom du projet</label>
+                <input id="newProjectName" type="text" placeholder="Ex : Audit forêt - Client - Commune" autocomplete="off">
+            </div>
+            <button id="createProject" class="action-button primary" type="button">＋ Créer le projet</button>
+        </div>
+
+        <div class="project-list-card">
+            <div class="section-title compact">
+                <h2>Mes projets</h2>
+                <p>Sélectionne un projet pour accéder au comptage et à la checklist.</p>
+            </div>
+            <div id="projectsList" class="projects-list"></div>
+        </div>
+    </section>
+
+    <nav class="tab-nav project-workspace" aria-label="Navigation principale">
         <button class="tab-button active" type="button" data-tab="inventory" aria-controls="inventoryPanel" aria-selected="true">🌲 Comptage</button>
         <button class="tab-button" type="button" data-tab="checklist" aria-controls="checklistPanel" aria-selected="false">✅ Checklist terrain</button>
     </nav>
 
-    <main class="app-main">
+    <main class="app-main project-workspace">
         <section id="inventoryPanel" class="tab-panel active" data-panel="inventory">
+        <div id="editNotice" class="edit-notice" hidden>
+            <strong>Modification d’un tènement existant.</strong>
+            <span>Les modifications seront appliquées à la ligne sélectionnée.</span>
+            <button id="cancelEdit" type="button">Annuler</button>
+        </div>
         <section class="counter-grid" aria-label="Compteurs de plants">
             <article class="counter-card alive" id="aliveCard" data-counter="alive">
                 <button class="touch-zone touch-zone-left" type="button" data-action="minus" data-counter="alive" aria-label="Retirer un plant vivant"><span>−</span></button>
@@ -179,7 +216,7 @@
             <button id="saveStand" class="action-button primary" type="button">💾 Enregistrer la saisie</button>
             <button id="newStand" class="action-button secondary" type="button">✅ Nouveau tènement</button>
             <button id="exportCsv" class="action-button secondary" type="button">📄 Export CSV</button>
-            <button id="clearAllData" class="action-button danger" type="button">🗑 Effacer toutes les données</button>
+            <button id="clearAllData" class="action-button danger" type="button">🗑 Effacer les données du projet</button>
         </section>
 
         <section class="summary" aria-label="Récapitulatif par tènement">
@@ -263,9 +300,9 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <footer class="app-footer">
+    <footer class="app-footer project-workspace">
         <span>Inventaire forestier</span>
-        <span>Version 2.13.0</span>
+        <span>Version 2.14.0</span>
     </footer>
 
     <script src="app.js"></script>
