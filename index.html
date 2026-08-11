@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventaire forestier</title>
+    <meta name="description" content="Application d'inventaire forestier pour compter les plants vivants et morts par tènement.">
+    <meta name="theme-color" content="#2e7d32">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-title">
+            <div>
+                <p class="eyebrow">Application terrain</p>
+                <h1>🌲 Inventaire forestier</h1>
+            </div>
+            <span class="version-badge">v2.8.0</span>
+        </div>
+
+        <section class="header-card" aria-label="Caractéristiques du tènement">
+            <div class="field field-wide">
+                <label for="standName">📍 Nom du tènement / Référence cadastrale</label>
+                <input id="standName" type="text" placeholder="Ex : Parcelle 17B, 40, 45..." autocomplete="off" autofocus>
+            </div>
+
+            <div class="field">
+                <label for="inventoryDate">📅 Date</label>
+                <input id="inventoryDate" type="date">
+            </div>
+
+            <div class="field field-wide">
+                <label for="standType">🌱 Type de tènement</label>
+                <select id="standType">
+                    <option value="standard">Essences hors feuillus précieux, peupliers, noyers</option>
+                    <option value="precious">Feuillus précieux</option>
+                    <option value="poplarWalnut">Peupliers et noyers</option>
+                    <option value="regionalExemption">Essence avec une dérogation régionale</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="surfaceHa">📐 Surface (ha)</label>
+                <input id="surfaceHa" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex : 6,00">
+            </div>
+
+            <div class="field">
+                <label for="initialDensity">🌲 Densité initiale (plants/ha)</label>
+                <input id="initialDensity" type="number" inputmode="numeric" min="0" step="1" placeholder="Ex : 900">
+            </div>
+
+            <div class="field">
+                <label for="objectiveDensity">🎯 Objectif de densité (plants vivants/ha)</label>
+                <input id="objectiveDensity" type="number" inputmode="numeric" min="0" step="1" readonly>
+            </div>
+
+            <div class="field duration-field">
+                <label for="durationHours">⏱️ Durée passée</label>
+                <div class="duration-inputs">
+                    <input id="durationHours" type="number" inputmode="numeric" min="0" step="1" placeholder="h" aria-label="Durée en heures">
+                    <input id="durationMinutes" type="number" inputmode="numeric" min="0" max="59" step="1" placeholder="min" aria-label="Durée en minutes">
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <nav class="tab-nav" aria-label="Navigation principale">
+        <button class="tab-button active" type="button" data-tab="inventory" aria-controls="inventoryPanel" aria-selected="true">🌲 Comptage</button>
+        <button class="tab-button" type="button" data-tab="checklist" aria-controls="checklistPanel" aria-selected="false">✅ Checklist terrain</button>
+    </nav>
+
+    <main class="app-main">
+        <section id="inventoryPanel" class="tab-panel active" data-panel="inventory">
+        <section class="counter-grid" aria-label="Compteurs de plants">
+            <article class="counter-card alive" id="aliveCard" data-counter="alive">
+                <button class="touch-zone touch-zone-left" type="button" data-action="minus" data-counter="alive" aria-label="Retirer un plant vivant"><span>−</span></button>
+                <div class="counter-content">
+                    <h2>🌳 Plants vivants</h2>
+                    <div class="counter-value" id="aliveValue" aria-live="polite">0</div>
+                    <p class="counter-hint">Gauche : −1 · Droite : +1</p>
+                </div>
+                <button class="touch-zone touch-zone-right" type="button" data-action="plus" data-counter="alive" aria-label="Ajouter un plant vivant"><span>+</span></button>
+            </article>
+
+            <article class="counter-card dead" id="deadCard" data-counter="dead">
+                <button class="touch-zone touch-zone-left" type="button" data-action="minus" data-counter="dead" aria-label="Retirer un plant mort"><span>−</span></button>
+                <div class="counter-content">
+                    <h2>🪵 Plants morts</h2>
+                    <div class="counter-value" id="deadValue" aria-live="polite">0</div>
+                    <p class="counter-hint">Gauche : −1 · Droite : +1</p>
+                </div>
+                <button class="touch-zone touch-zone-right" type="button" data-action="plus" data-counter="dead" aria-label="Ajouter un plant mort"><span>+</span></button>
+            </article>
+        </section>
+
+
+
+        <section class="manual-adjust-card" aria-label="Ajustement manuel des compteurs">
+            <div class="section-title compact">
+                <h2>✍️ Ajustement manuel</h2>
+                <p>Pour corriger rapidement un nombre défini de plants.</p>
+            </div>
+
+            <div class="manual-adjust-grid">
+                <div class="field">
+                    <label for="manualCounter">Compteur à modifier</label>
+                    <select id="manualCounter">
+                        <option value="alive">Plants vivants</option>
+                        <option value="dead">Plants morts</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="manualAmount">Nombre de plants</label>
+                    <input id="manualAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex : 25">
+                </div>
+
+                <div class="manual-buttons">
+                    <button id="manualMinus" class="manual-button minus" type="button">− Retirer</button>
+                    <button id="manualPlus" class="manual-button plus" type="button">+ Ajouter</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-card" aria-label="Calculs du tènement en cours">
+            <div class="section-title compact">
+                <h2>🌿 Calculs en temps réel</h2>
+                <p>Les indicateurs se mettent à jour pendant le comptage.</p>
+            </div>
+
+            <div class="main-kpi">
+                <span class="kpi-label">Taux d'arbres vivants</span>
+                <strong id="alivePercent">0 %</strong>
+                <div class="progress" aria-label="Pourcentage d'arbres vivants"><div id="progressBar" class="progress-bar"></div></div>
+                <span id="totalTrees" class="total">0 plant comptabilisé</span>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span>Comptage statistique</span>
+                    <strong id="samplePercent">0 %</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Plants à compter</span>
+                    <strong id="plantsToCount">0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Plants comptés</span>
+                    <strong id="plantsCounted">0</strong>
+                </div>
+                <div class="kpi-card highlight">
+                    <span>Plants restants à compter</span>
+                    <strong id="plantsRemaining">0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Densité de plants vivants</span>
+                    <strong id="livingDensity">0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Durée passée</span>
+                    <strong id="durationDisplay">0 h 00</strong>
+                </div>
+                <div class="kpi-card status-card" id="countingStatusCard">
+                    <span>Respect du comptage statistique</span>
+                    <strong id="countingStatus">❌</strong>
+                </div>
+                <div class="kpi-card status-card" id="successStatusCard">
+                    <span>Tènement réussi</span>
+                    <strong id="successStatus">❌</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="actions" aria-label="Actions principales">
+            <button id="saveStand" class="action-button primary" type="button">💾 Enregistrer la saisie</button>
+            <button id="newStand" class="action-button secondary" type="button">✅ Nouveau tènement</button>
+            <button id="exportCsv" class="action-button secondary" type="button">📄 Export CSV</button>
+            <button id="clearAllData" class="action-button danger" type="button">🗑 Effacer toutes les données</button>
+        </section>
+
+        <section class="summary" aria-label="Récapitulatif par tènement">
+            <div class="section-title">
+                <div>
+                    <h2>📋 Récapitulatif</h2>
+                    <p>Format aligné sur ton tableau Excel.</p>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Nom du tènement / Référence cadastrale</th>
+                            <th scope="col">Type de tènement</th>
+                            <th scope="col">Objectif de densité<br>(plants vivants/ha)</th>
+                            <th scope="col">Surface<br>(ha)</th>
+                            <th scope="col">Comptage statistique</th>
+                            <th scope="col">Densité initiale<br>(plants/ha)</th>
+                            <th scope="col">Plants vivants</th>
+                            <th scope="col">Plants morts</th>
+                            <th scope="col">Taux d'arbres vivants</th>
+                            <th scope="col">Densité de plants vivants<br>(plants/ha)</th>
+                            <th scope="col">Plants à compter</th>
+                            <th scope="col">Plants comptés</th>
+                            <th scope="col">Respect comptage statistique</th>
+                            <th scope="col">Tènement réussi</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody">
+                        <tr id="emptySummaryRow"><td colspan="16" class="empty-state">Aucun tènement enregistré pour le moment.</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr id="totalsRow">
+                            <th colspan="5">TOTAL</th>
+                            <th></th>
+                            <th></th>
+                            <th id="sumAlive" data-label="Plants vivants">0</th>
+                            <th id="sumDead" data-label="Plants morts">0</th>
+                            <th id="sumPercent" data-label="Taux vivants">0 %</th>
+                            <th id="sumLivingDensity" data-label="Densité vivante">0</th>
+                            <th id="sumPlantsToCount" data-label="Plants à compter">0</th>
+                            <th id="sumPlantsCounted" data-label="Plants comptés">0</th>
+                            <th id="sumCountingStatus" data-label="Comptage stat.">❌</th>
+                            <th id="sumSuccessStatus" data-label="Réussite">❌</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+        </section>
+
+        <section id="checklistPanel" class="tab-panel" data-panel="checklist" hidden>
+            <section class="checklist-card" aria-label="Checklist terrain de l'auditeur">
+                <div class="section-title checklist-title">
+                    <div>
+                        <h2>✅ Checklist terrain</h2>
+                        <p>Questions à compléter pendant ou après le comptage des plants.</p>
+                    </div>
+                    <div class="checklist-progress" id="checklistProgress">0 / 0 complété</div>
+                </div>
+
+                <div class="checklist-info">
+                    <strong>Mode d'emploi :</strong> sélectionne une réponse pour chaque point : Oui, Non, N/A ou Non audité. Tu peux aussi ajouter un commentaire terrain question par question.
+                </div>
+
+                <div id="checklistList" class="checklist-list"></div>
+
+                <div class="checklist-actions">
+                    <button id="exportChecklistCsv" class="action-button secondary" type="button">📄 Export checklist CSV</button>
+                    <button id="resetChecklist" class="action-button danger" type="button">🧹 Réinitialiser la checklist</button>
+                </div>
+            </section>
+        </section>
+
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer class="app-footer">
+        <span>Inventaire forestier</span>
+        <span>Version 2.8.0</span>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
