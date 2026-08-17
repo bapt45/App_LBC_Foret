@@ -1,16 +1,17 @@
-const CACHE_NAME = 'inventaire-forestier-v2-14-0';
+const CACHE_NAME = 'audit-lbc-foret-v3-29-0';
 const FILES = [
   './',
   './index.html',
-  './style.css',
-  './app.js',
+  './style.css?v=3.29.0',
+  './app.js?v=3.29.0',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
   './assets/cu-logo-fullcolour.png',
   './assets/cu-logo-whitetext.png',
   './assets/cu-logo-black.png',
-  './assets/cu-logo-white.png'
+  './assets/cu-logo-white.png',
+  './assets/projets_lbc.csv'
 ];
 
 self.addEventListener('install', (event) => {
