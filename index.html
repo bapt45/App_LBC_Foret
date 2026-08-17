@@ -3,23 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventaire forestier</title>
-    <meta name="description" content="Application d'inventaire forestier pour compter les plants vivants et morts par tènement.">
+    <title>Audit Label Bas-Carbone Forêt</title>
+    <meta name="description" content="Application d'audit Label Bas-Carbone Forêt.">
     <meta name="theme-color" content="#1B1D43">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/icon-192.png">
+    <link rel="stylesheet" href="style.css?v=3.29.0">
 </head>
-<body>
+<body class="auth-locked">
+    <section id="loginScreen" class="login-screen" aria-label="Connexion à l’application">
+        <div class="login-card">
+            <img class="login-logo" src="assets/cu-logo-fullcolour.png" alt="Control Union">
+            <p class="eyebrow">Accès auditeur</p>
+            <h1>Connexion à l’application d’audit</h1>
+            <p class="login-help">Identifie-toi pour charger tes droits : accès Admin, édition des audits, export PDF et futures sections sensibles.</p>
+            <div class="field">
+                <label for="loginEmail">Email auditeur</label>
+                <input id="loginEmail" type="email" autocomplete="username" placeholder="prenom.nom@controlunion.com">
+            </div>
+            <div class="field">
+                <label for="loginPassword">Mot de passe</label>
+                <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Mot de passe">
+            </div>
+            <p id="loginError" class="login-error" role="alert" hidden></p>
+            <button id="loginSubmit" class="action-button primary login-submit" type="button">Se connecter</button>
+            <p class="login-disclaimer">Version locale : ces accès pilotent les droits d’usage dans l’application. Pour une sécurité forte, il faudra connecter plus tard un vrai service d’authentification.</p>
+        </div>
+    </section>
     <header class="app-header">
         <div class="app-title">
             <div class="brand-block">
                 <img class="brand-logo" src="assets/cu-logo-whitetext.png" alt="Control Union">
                 <div>
                     <p class="eyebrow">Application terrain</p>
-                    <h1>🌲 Inventaire forestier</h1>
+                    <h1>🌲 Audit Label Bas-Carbone Forêt</h1>
                 </div>
             </div>
-            <span class="version-badge">v2.14.0</span>
+            <div class="title-actions">
+                <button id="openAdminPanel" class="admin-button" type="button" title="Paramètres globaux">⚙️</button>
+                <div id="currentUserBadge" class="user-badge" hidden></div>
+                <button id="logoutButton" class="logout-button" type="button" hidden>Déconnexion</button>
+                <span class="version-badge">v3.29.0</span>
+            </div>
         </div>
 
         <section id="projectContext" class="project-context" hidden>
@@ -30,10 +55,242 @@
             </div>
         </section>
 
+    </header>
+
+    <section id="projectHome" class="project-home" aria-label="Accueil des projets">
+        <div class="home-hero">
+            <p class="eyebrow">Gestion des audits</p>
+            <h2>Choisir ou créer un projet</h2>
+            <p>Chaque projet dispose de son rapport, de son audit terrain, de sa checklist, de ses co-bénéfices et de ses exports.</p>
+        </div>
+
+        <div class="project-create-card">
+            <div class="field">
+                <label for="newProjectName">Nom du projet du registre Label Bas-Carbone</label>
+                <input id="newProjectName" type="text" list="lbcProjectsDatalist" placeholder="Sélectionne un projet importé" autocomplete="off">
+                <datalist id="lbcProjectsDatalist"></datalist>
+            </div>
+            <button id="createProject" class="action-button primary" type="button">＋ Créer le projet depuis le registre</button>
+        </div>
+
+        <div class="project-list-card">
+            <div class="section-title compact">
+                <h2>Mes projets</h2>
+                <p>Sélectionne un projet pour accéder au rapport, à l’audit terrain, à la checklist et aux co-bénéfices.</p>
+            </div>
+            <div id="projectsList" class="projects-list"></div>
+        </div>
+    </section>
+
+    <nav class="tab-nav project-workspace" aria-label="Navigation principale">
+        <button class="tab-button active" type="button" data-tab="report" aria-controls="reportPanel" aria-selected="true">📄 Rapport</button>
+        <button class="tab-button" type="button" data-tab="parcels" aria-controls="parcelsPanel" aria-selected="false">🗺️ Liste des parcelles</button>
+        <button class="tab-button" type="button" data-tab="inventory" aria-controls="inventoryPanel" aria-selected="false">🌲 Audit terrain</button>
+        <button class="tab-button" type="button" data-tab="checklist" aria-controls="checklistPanel" aria-selected="false">✅ Checklist</button>
+        <button class="tab-button" type="button" data-tab="cobenefits" aria-controls="cobenefitsPanel" aria-selected="false">🌿 Co-bénéfices</button>
+        <button class="tab-button" type="button" data-tab="admin" aria-controls="adminPanel" aria-selected="false">⚙️ Admin</button>
+    </nav>
+
+    <main class="app-main project-workspace">
+        <section id="reportPanel" class="tab-panel active" data-panel="report">
+            <section class="report-card" aria-label="Rapport d'audit Label Bas-Carbone Forêt">
+                <div class="section-title report-title">
+                    <div>
+                        <h2>📄 Rapport d'audit</h2>
+                        <p>Les contrôles de cohérence seront ajoutés progressivement.</p>
+                    </div>
+                    <div class="report-title-actions">
+                        <button id="exportAuditPdf" class="action-button primary" type="button">📄 Export PDF</button>
+                    </div>
+                </div>
+
+                <form id="reportForm" class="report-form">
+                    <section class="report-section">
+                        <h3>Données de base</h3>
+                        <div class="report-grid cols-4">
+                            <div class="field"><label>Numéro de projet</label><input data-report-field="base_auditProjectNumber" type="text" autocomplete="off" inputmode="numeric" maxlength="6" pattern="\d{6}" placeholder="6 chiffres"></div>
+                            <div class="field"><label>Durée d'audit (jours)</label><input data-report-field="base_auditDurationDays" type="number" min="0" step="0.5" inputmode="decimal"></div>
+                            <div class="field"><label>Date de début d'audit</label><input data-report-field="base_auditStartDate" type="date" autocomplete="off"></div>
+                            <div class="field"><label>Date de fin d'audit</label><input data-report-field="base_auditEndDate" type="date" autocomplete="off"></div>
+                            <div class="field field-wide"><label>Organisme</label><input data-report-field="base_organization" type="text" autocomplete="off" value="Control Union Inspections France" readonly></div>
+                            <div class="field field-wide"><label>Auditeur principal</label><select id="reportLeadAuditor" data-report-field="base_leadAuditor"></select></div>
+                            <div class="field field-wide"><label>Qualifications</label><input id="reportLeadQualification" data-report-field="base_qualifications" type="text" autocomplete="off" readonly></div>
+                            <div class="field field-full"><label>Autre(s) auditeur(s) et statuts</label><div id="otherAuditorsList" class="dynamic-list"></div><button id="addOtherAuditor" class="inline-add-button" type="button">+ Ajouter un auditeur</button></div>
+                        </div>
+                    </section>
+
+                    <section class="report-section">
+                        <h3>Identification du mandataire Label Bas-Carbone</h3>
+                        <div class="report-grid cols-4">
+                            <div class="field"><label>SIRET</label><input data-report-field="client_siret" type="text" autocomplete="off" inputmode="numeric" maxlength="14" pattern="\d{14}" placeholder="14 chiffres"></div>
+                            <div class="field field-wide"><label>Nom du client</label><input data-report-field="client_name" type="text" autocomplete="off"></div>
+                            <div class="field field-wide"><label>Rue du siège</label><input data-report-field="client_address" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Code postal</label><input data-report-field="client_zip" type="text" autocomplete="off" inputmode="numeric" maxlength="5" pattern="\d{5}" placeholder="00000"></div>
+                            <div class="field"><label>Ville</label><input data-report-field="client_city" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Pays</label><input data-report-field="client_country" type="text" autocomplete="off" value="FRANCE" readonly></div>
+                            <div class="field"><label>Civilité du contact</label><select id="clientContactTitle" data-report-field="client_contactTitle"></select></div>
+                            <div class="field"><label>Prénom du contact</label><input data-report-field="client_contactFirstName" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Nom du contact</label><input data-report-field="client_contactLastName" type="text" autocomplete="off"></div>
+                            <div class="field field-wide"><label>Email</label><input data-report-field="client_email" type="email" autocomplete="off"></div>
+                            <div class="field field-wide"><label>Rôle du contact</label><input data-report-field="client_contactRole" type="text" autocomplete="off"></div>
+                            <div class="field field-full"><label>Autres personnes consultées et rôles</label><div id="otherPeopleList" class="dynamic-list"></div><button id="addOtherPerson" class="inline-add-button" type="button">+ Ajouter une personne</button></div>
+                        </div>
+                    </section>
+
+                    <section class="report-section">
+                        <h3>Identification du projet Label Bas-Carbone</h3>
+                        <div class="report-grid cols-4">
+                            <div class="field field-full registry-project-picker">
+                                <label>Nom du projet dans le registre Label Bas-Carbone</label>
+                                <input id="lbcProjectName" data-report-field="project_name" list="lbcProjectsDatalist" type="text" autocomplete="off" placeholder="Sélectionner un projet du registre">
+                                <datalist id="lbcProjectsDatalist"></datalist>
+                                <small id="lbcProjectHint" class="field-hint">Importe le registre dans l’espace Admin pour alimenter cette liste. La sélection alimente automatiquement le nom du client et la méthode.</small>
+                            </div>
+                            <div class="field"><label>Référence du projet</label><input data-report-field="project_lbcNumber" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Date de notification</label><input data-report-field="project_notificationDate" type="date" autocomplete="off"></div>
+                            <div class="field"><label>Code postal</label><input data-report-field="project_zip" type="text" autocomplete="off" inputmode="numeric" maxlength="5" pattern="\d{5}" placeholder="00000"></div>
+                            <div class="field"><label>Ville / commune</label><input data-report-field="project_city" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Pays</label><input data-report-field="project_country" type="text" autocomplete="off" value="FRANCE" readonly></div>
+                            <div class="field"><label>Type d'audit</label><select id="projectAuditType" data-report-field="project_auditType"></select></div>
+                            <div class="field"><label>Méthode</label><select id="projectMethod" data-report-field="project_method"></select></div>
+                            <div class="field field-wide"><label>Version de la méthode</label><select id="projectMethodVersion" data-report-field="project_methodVersion"></select></div>
+                            <div class="field field-wide"><label>Version de l'outil</label><input data-report-field="project_toolVersion" type="text" autocomplete="off"></div>
+                            <div class="field"><label>Nombre de propriétaires</label><input data-report-field="project_ownerCount" type="number" min="0" step="1" inputmode="numeric"></div>
+                            <div class="field field-wide"><label>Date de fin de chantier</label><input data-report-field="project_workEndDate" type="date" autocomplete="off"></div>
+                            <div class="field"><label>Date de labellisation</label><input data-report-field="project_labelDate" type="date" autocomplete="off"></div>
+                            <div class="field"><label>Surface du projet (ha)</label><input data-report-field="project_surfaceHa" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                            <div class="field"><label>Surface réellement boisée (ha)</label><input data-report-field="project_actualWoodedSurfaceHa" type="number" min="0" step="0.01" inputmode="decimal"></div>
+                            <div class="field"><label>RE potentielles (tCO2eq)</label><input data-report-field="project_potentialEmissionReduction" type="number" step="0.01"></div>
+                            <div class="field field-full"><label>Classe de fertilité retenue</label><div id="fertilityRows" class="dynamic-list fertility-list"></div><button id="addFertilityRow" class="inline-add-button" type="button">+ Ajouter une essence</button></div>
+                        </div>
+                    </section>
+
+                    <section class="report-section">
+                        <h3>Synthèse des réductions d'émissions</h3>
+                        <p class="report-note">REE avant rabais est calculée à partir des trois premières lignes. Le rabais 2 est fixé à 10 % par défaut.</p>
+                        <p class="report-note">Les valeurs du porteur de projet sont reprises en pré-remplissage ; toute différence entre la colonne porteur et la colonne audit doit être justifiée.</p>
+                        <div class="report-table-wrapper">
+                            <table class="report-table compact-table">
+                                <thead><tr><th>Poste d'émission</th><th>Résultat Porteur de Projet (tCO2eq)</th><th>Résultat Audit (tCO2eq)</th><th>Justification</th></tr></thead>
+                                <tbody>
+                                    <tr><td>REA forêt avant rabais</td><td><input data-report-field="em_reaForestBeforeProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaForestBeforeAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaForestBeforeJustification" type="text"></td></tr>
+                                    <tr><td>REA produits avant rabais</td><td><input data-report-field="em_reaProductsBeforeProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaProductsBeforeAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaProductsBeforeJustification" type="text"></td></tr>
+                                    <tr><td>REI substitution avant rabais</td><td><input data-report-field="em_reiSubBeforeProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reiSubBeforeAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reiSubBeforeJustification" type="text"></td></tr>
+                                    <tr><td>REE avant rabais</td><td><input data-report-field="em_reeBeforeProject" type="number" step="0.01" inputmode="decimal" readonly class="summary-readonly ree-calculated"></td><td><input data-report-field="em_reeBeforeAudit" type="number" step="0.01" inputmode="decimal" readonly class="summary-readonly ree-calculated"></td><td><input data-report-field="em_reeBeforeJustification" type="text"></td></tr>
+                                    <tr><td>Rabais 1 - Additionnalité (%)</td><td><input data-report-field="em_discount1Project" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount1Audit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount1Justification" type="text"></td></tr>
+                                    <tr><td>Rabais 2 - Risques généraux (%)</td><td><input data-report-field="em_discount2Project" type="number" step="0.01" inputmode="decimal" readonly class="summary-readonly"></td><td><input data-report-field="em_discount2Audit" type="number" step="0.01" inputmode="decimal" readonly class="summary-readonly"></td><td><input data-report-field="em_discount2Justification" type="text"></td></tr>
+                                    <tr><td>Rabais 3 - Risque d'incendie (%)</td><td><input data-report-field="em_discount3Project" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount3Audit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount3Justification" type="text"></td></tr>
+                                    <tr><td>Rabais 4 - Non justification de la classe (%)</td><td><input data-report-field="em_discount4Project" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount4Audit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount4Justification" type="text"></td></tr>
+                                    <tr><td>Rabais 5 - Vérification additionnelle de terrain (%)</td><td><input data-report-field="em_discount5Project" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount5Audit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_discount5Justification" type="text"></td></tr>
+                                    <tr><td>REA forêt après rabais</td><td><input data-report-field="em_reaForestAfterProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaForestAfterAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaForestAfterJustification" type="text"></td></tr>
+                                    <tr><td>REA produits après rabais</td><td><input data-report-field="em_reaProductsAfterProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaProductsAfterAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reaProductsAfterJustification" type="text"></td></tr>
+                                    <tr><td>REI substitution après rabais</td><td><input data-report-field="em_reiSubAfterProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reiSubAfterAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reiSubAfterJustification" type="text"></td></tr>
+                                    <tr><td>REE après rabais</td><td><input data-report-field="em_reeAfterProject" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reeAfterAudit" type="number" step="0.01" inputmode="decimal"></td><td><input data-report-field="em_reeAfterJustification" type="text"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="report-section">
+                        <h3>Synthèse des co-bénéfices</h3>
+                        <p class="report-note">La colonne Audit est calculée automatiquement depuis les points sélectionnés dans l’onglet Co-bénéfices et le maximum atteignable défini dans l’Admin. La valeur <strong>NA</strong> s’affiche lorsqu’une catégorie n’est pas applicable pour la méthode/version.</p>
+                        <div class="report-table-wrapper">
+                            <table class="report-table">
+                                <thead><tr><th>Type</th><th>Résultat Mandataire (%)</th><th>Résultat Audit (%)</th><th>Justification</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Socio-économique</td><td><input data-report-field="cb_socioClient" type="text" inputmode="decimal" placeholder="0,00 ou NA"></td><td><input data-report-field="cb_socioAudit" type="text" readonly class="summary-readonly" placeholder="Auto"></td><td><input data-report-field="cb_socioJustification" type="text"></td></tr>
+                                    <tr><td>Préservation des sols</td><td><input data-report-field="cb_soilClient" type="text" inputmode="decimal" placeholder="0,00 ou NA"></td><td><input data-report-field="cb_soilAudit" type="text" readonly class="summary-readonly" placeholder="Auto"></td><td><input data-report-field="cb_soilJustification" type="text"></td></tr>
+                                    <tr><td>Biodiversité</td><td><input data-report-field="cb_biodiversityClient" type="text" inputmode="decimal" placeholder="0,00 ou NA"></td><td><input data-report-field="cb_biodiversityAudit" type="text" readonly class="summary-readonly" placeholder="Auto"></td><td><input data-report-field="cb_biodiversityJustification" type="text"></td></tr>
+                                    <tr><td>Changement climatique</td><td><input data-report-field="cb_climateClient" type="text" inputmode="decimal" placeholder="0,00 ou NA"></td><td><input data-report-field="cb_climateAudit" type="text" readonly class="summary-readonly" placeholder="Auto"></td><td><input data-report-field="cb_climateJustification" type="text"></td></tr>
+                                    <tr><td>Eau</td><td><input data-report-field="cb_waterClient" type="text" inputmode="decimal" placeholder="0,00 ou NA"></td><td><input data-report-field="cb_waterAudit" type="text" readonly class="summary-readonly" placeholder="Auto"></td><td><input data-report-field="cb_waterJustification" type="text"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="report-section">
+                        <h3>Conclusion</h3>
+                        <p class="report-note">Les champs de synthèse ci-dessous sont alimentés automatiquement par les sections précédentes.</p>
+                        <h4>Non-conformités</h4>
+                        <div class="report-grid cols-4">
+                            <div class="field"><label>Éligibilité</label><input data-report-field="conformity_eligibility" type="text" readonly class="summary-readonly"></div>
+                            <div class="field"><label>Autre vérification documentaire</label><input data-report-field="conformity_documentary" type="text" readonly class="summary-readonly"></div>
+                            <div class="field"><label>Co-bénéfices</label><input data-report-field="conformity_cobenefits" type="text" readonly class="summary-readonly"></div>
+                            <div class="field"><label>Audit terrain</label><input data-report-field="conformity_fieldAudit" type="text" readonly class="summary-readonly"></div>
+                        </div>
+                        <h4>Réductions d'émissions vérifiées</h4>
+                        <div class="report-grid cols-2">
+                            <div class="field field-wide"><label>Valeur vérifiée (tCO2eq)</label><input data-report-field="conclusion_verifiedReductions" type="number" step="0.01" inputmode="decimal" readonly class="summary-readonly"></div>
+                        </div>
+                        <h4>Co-bénéfices vérifiés</h4>
+                        <div class="report-table-wrapper small">
+                            <table class="report-table">
+                                <thead><tr><th>Type</th><th>Résultat (%)</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Socio-économique</td><td><input data-report-field="conclusion_socioResult" type="text" readonly class="summary-readonly" placeholder="0,00 ou NA"></td></tr>
+                                    <tr><td>Préservation des sols</td><td><input data-report-field="conclusion_soilResult" type="text" readonly class="summary-readonly" placeholder="0,00 ou NA"></td></tr>
+                                    <tr><td>Biodiversité</td><td><input data-report-field="conclusion_biodiversityResult" type="text" readonly class="summary-readonly" placeholder="0,00 ou NA"></td></tr>
+                                    <tr><td>Changement climatique</td><td><input data-report-field="conclusion_climateResult" type="text" readonly class="summary-readonly" placeholder="0,00 ou NA"></td></tr>
+                                    <tr><td>Eau</td><td><input data-report-field="conclusion_waterResult" type="text" readonly class="summary-readonly" placeholder="0,00 ou NA"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="report-grid cols-2 conclusion-notes">
+                            <div class="field"><label>Observations de l'auditeur</label><textarea data-report-field="conclusion_auditorObservations" rows="5"></textarea></div>
+                            <div class="field"><label>Observations du mandataire</label><textarea data-report-field="conclusion_clientObservations" rows="5"></textarea></div>
+                            <div class="field field-full"><label>Conclusion générale</label><textarea data-report-field="conclusion_statement" rows="3" readonly class="summary-readonly"></textarea></div>
+                            <div class="field"><label>Nom de l'auditeur</label><input data-report-field="conclusion_auditorName" type="text" readonly class="summary-readonly"></div>
+                            <div class="field"><label>Signature</label><input data-report-field="conclusion_signature" type="text" placeholder="Nom ou mention de signature"></div>
+                        </div>
+                    </section>
+                </form>
+            </section>
+        </section>
+
+        <section id="parcelsPanel" class="tab-panel" data-panel="parcels" hidden>
+            <section class="parcels-card" aria-label="Liste des parcelles du projet">
+                <div class="section-title">
+                    <div>
+                        <h2>🗺️ Liste des parcelles</h2>
+                        <p>Ajoute les parcelles du projet. Elles serviront ensuite à composer automatiquement les tènements dans l’onglet Audit terrain.</p>
+                    </div>
+                    <button id="addParcel" class="inline-add-button" type="button">+ Ajouter une parcelle</button>
+                </div>
+
+                <div class="table-wrapper parcels-table-wrapper">
+                    <table id="parcelsTable" class="parcels-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nom de la parcelle</th>
+                                <th scope="col">Surface (ha)</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parcelsBody">
+                            <tr><td colspan="3" class="empty-state">Aucune parcelle enregistrée pour ce projet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+
+        <section id="inventoryPanel" class="tab-panel" data-panel="inventory" hidden>
+        <div class="section-title page-title"><div><h2>🌲 Audit terrain</h2><p>Comptage statistique et suivi des tènements du projet.</p></div></div>
         <section class="header-card" aria-label="Caractéristiques du tènement">
+            <div class="field field-full parcel-selector-field">
+                <label>🗺️ Parcelle(s) composant le tènement</label>
+                <div id="standParcelsList" class="parcel-selector-list"></div>
+                <p class="field-help">Sélectionne une ou plusieurs parcelles. Le nom et la surface du tènement sont calculés automatiquement.</p>
+            </div>
+
             <div class="field field-wide">
-                <label for="standName">📍 Nom du tènement / Référence cadastrale</label>
-                <input id="standName" type="text" placeholder="Ex : Parcelle 17B, 40, 45..." autocomplete="off" autofocus>
+                <label for="standName">📍 Nom du tènement généré</label>
+                <input id="standName" type="text" placeholder="Sélectionner une ou plusieurs parcelles" autocomplete="off" readonly>
+            </div>
+
+            <div class="field">
+                <label for="surfaceHa">📐 Surface calculée (ha)</label>
+                <input id="surfaceHa" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" readonly>
             </div>
 
             <div class="field">
@@ -49,11 +306,6 @@
                     <option value="poplarWalnut">Peupliers et noyers</option>
                     <option value="regionalExemption">Essence avec une dérogation régionale</option>
                 </select>
-            </div>
-
-            <div class="field">
-                <label for="surfaceHa">📐 Surface (ha)</label>
-                <input id="surfaceHa" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex : 6,00">
             </div>
 
             <div class="field">
@@ -74,39 +326,7 @@
                 </div>
             </div>
         </section>
-    </header>
 
-    <section id="projectHome" class="project-home" aria-label="Accueil des projets">
-        <div class="home-hero">
-            <p class="eyebrow">Gestion des audits</p>
-            <h2>Choisir ou créer un projet</h2>
-            <p>Chaque projet dispose de sa propre checklist terrain, de ses tènements et de ses exports CSV.</p>
-        </div>
-
-        <div class="project-create-card">
-            <div class="field">
-                <label for="newProjectName">Nom du projet</label>
-                <input id="newProjectName" type="text" placeholder="Ex : Audit forêt - Client - Commune" autocomplete="off">
-            </div>
-            <button id="createProject" class="action-button primary" type="button">＋ Créer le projet</button>
-        </div>
-
-        <div class="project-list-card">
-            <div class="section-title compact">
-                <h2>Mes projets</h2>
-                <p>Sélectionne un projet pour accéder au comptage et à la checklist.</p>
-            </div>
-            <div id="projectsList" class="projects-list"></div>
-        </div>
-    </section>
-
-    <nav class="tab-nav project-workspace" aria-label="Navigation principale">
-        <button class="tab-button active" type="button" data-tab="inventory" aria-controls="inventoryPanel" aria-selected="true">🌲 Comptage</button>
-        <button class="tab-button" type="button" data-tab="checklist" aria-controls="checklistPanel" aria-selected="false">✅ Checklist terrain</button>
-    </nav>
-
-    <main class="app-main project-workspace">
-        <section id="inventoryPanel" class="tab-panel active" data-panel="inventory">
         <div id="editNotice" class="edit-notice" hidden>
             <strong>Modification d’un tènement existant.</strong>
             <span>Les modifications seront appliquées à la ligne sélectionnée.</span>
@@ -232,7 +452,7 @@
                     <thead>
                         <tr>
                             <th scope="col">N°</th>
-                            <th scope="col">Nom du tènement / Référence cadastrale</th>
+                            <th scope="col">Tènement / parcelles</th>
                             <th scope="col">Type de tènement</th>
                             <th scope="col">Objectif de densité<br>(plants vivants/ha)</th>
                             <th scope="col">Surface<br>(ha)</th>
@@ -274,11 +494,11 @@
         </section>
 
         <section id="checklistPanel" class="tab-panel" data-panel="checklist" hidden>
-            <section class="checklist-card" aria-label="Checklist terrain de l'auditeur">
+            <section class="checklist-card" aria-label="Checklist de l'auditeur">
                 <div class="section-title checklist-title">
                     <div>
-                        <h2>✅ Checklist terrain</h2>
-                        <p>Questions à compléter pendant ou après le comptage des plants.</p>
+                        <h2>✅ Checklist</h2>
+                        <p>Questions à compléter pendant ou après l’audit. La partie terrain est une section de la checklist complète.</p>
                     </div>
                     <div class="checklist-progress" id="checklistProgress">0 / 0 complété</div>
                 </div>
@@ -286,6 +506,8 @@
                 <div class="checklist-info">
                     <strong>Mode d'emploi :</strong> sélectionne une réponse pour chaque point : Oui, Non, N/A ou Non audité. Tu peux aussi ajouter un commentaire terrain question par question.
                 </div>
+
+                <div id="checklistCategoryNav" class="checklist-category-nav" aria-label="Navigation rapide checklist"></div>
 
                 <div id="checklistList" class="checklist-list"></div>
 
@@ -296,15 +518,307 @@
             </section>
         </section>
 
+        <section id="cobenefitsPanel" class="tab-panel" data-panel="cobenefits" hidden>
+            <section class="cobenefits-card" aria-label="Co-bénéfices">
+                <div class="section-title cobenefits-title">
+                    <div>
+                        <h2>🌿 Co-bénéfices</h2>
+                        <p>Listing des co-bénéfices à vérifier. Les règles d’attribution des points seront enrichies dans une prochaine étape.</p>
+                    </div>
+                    <div class="checklist-progress" id="cobenefitsProgress">0 / 0 complété</div>
+                </div>
+
+                <div class="checklist-info">
+                    <strong>Mode d'emploi :</strong> sélectionne la réponse correspondant au co-bénéfice demandé par le client. Les points sont calculés automatiquement selon la méthode et la version renseignées dans le rapport.
+                </div>
+
+                <div id="cobenefitCategoryNav" class="checklist-category-nav cobenefit-category-nav" aria-label="Navigation rapide co-bénéfices"></div>
+
+                <div id="cobenefitsList" class="cobenefits-list"></div>
+
+                <div class="checklist-actions">
+                    <button id="exportCobenefitsCsv" class="action-button secondary" type="button">📄 Export co-bénéfices CSV</button>
+                    <button id="resetCobenefits" class="action-button danger" type="button">🧹 Réinitialiser les co-bénéfices</button>
+                </div>
+            </section>
+        </section>
+
+        <section id="adminPanel" class="tab-panel" data-panel="admin" hidden>
+            <section class="admin-card" aria-label="Espace admin">
+                <div class="section-title admin-title">
+                    <div>
+                        <h2>⚙️ Espace admin</h2>
+                        <p>Référentiels locaux utilisés dans les listes déroulantes du rapport. Ces données sont stockées dans le navigateur.</p>
+                    </div>
+                </div>
+
+                <div class="checklist-info">
+                    <strong>Import / export :</strong> le bouton ci-dessous traite tout le référentiel (format <code>table;valeur;valeur_2</code>). Les icônes 📤 / 📥 de chaque liste exportent et réimportent cette liste seule, avec le point-virgule comme séparateur. Dans les deux cas, les entrées verrouillées du référentiel officiel sont conservées.
+                </div>
+
+                <div class="admin-actions">
+                    <button id="exportAdminCsv" class="action-button secondary" type="button">📄 Export référentiel CSV</button>
+                    <label class="file-import-button">📥 Import référentiel CSV<input id="importAdminCsv" type="file" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label>
+                    <button id="resetAdminLists" class="action-button danger" type="button">↩ Restaurer les listes par défaut</button>
+                </div>
+
+                <section class="admin-section admin-section-full registry-admin-section">
+                    <div class="admin-section-header">
+                        <div>
+                            <h3>Registre Label Bas-Carbone</h3>
+                            <p>Importe l’extract officiel du registre au format XLSX (ou CSV) pour alimenter la liste des projets dans l’onglet Rapport. L’app inclut aussi une base initiale issue de l’extract fourni.</p>
+                        </div>
+                    </div>
+                    <div class="registry-admin-summary">
+                        <div><strong id="registryProjectCount">0</strong><span>projet(s) importé(s)</span></div>
+                        <div><strong id="registryLastImport">—</strong><span>dernier import</span></div>
+                    </div>
+                    <div class="admin-actions compact-actions">
+                        <label class="file-import-button">📥 Importer le registre XLSX<input id="importRegistryCsv" type="file" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden></label>
+                        <button id="exportRegistryCsv" class="action-button secondary" type="button">📄 Export base projets CSV</button>
+                        <button id="clearRegistry" class="action-button danger" type="button">🧹 Vider la base projets</button>
+                    </div>
+                    <p class="admin-help-text">Colonnes attendues dans le registre : Référence du projet ; Méthode ; Nom du projet ; RE potentielles (tCO2) ; RE vérifiées (tCO2) ; Région administrative ; Demandeur ; Date de notification ; Date de labelisation ; Financé à. Le fichier XLSX est lu directement dans l’application.</p>
+                </section>
+
+                <div class="admin-grid">
+                    <section class="admin-section">
+                        <div class="admin-section-header">
+                            <div><h3>Auditeurs et accès</h3><p>Une seule fiche regroupe désormais l’auditeur, son email de connexion, son mot de passe, son rôle et sa qualification.</p></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="auditors">+ Ajouter un auditeur</button>
+                                <button class="export-button" type="button" data-admin-export="auditors" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="auditors" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="checklist-info compact-info"><strong>Rôles :</strong> Administrateur = accès complet ; Auditeur senior = audit + export + future section ; Auditeur = audit + export ; Lecteur = consultation seule. Les droits affichés sont calculés automatiquement à partir du rôle.</div>
+                        <div class="admin-table-wrapper"><table class="admin-table auditors-access-table"><thead><tr><th>Nom</th><th>Email</th><th>Mot de passe</th><th>Qualification / statut</th><th>Rôle</th><th>Actif</th><th>Droits associés</th><th></th></tr></thead><tbody id="adminAuditorsBody"></tbody></table></div>
+                    </section>
+
+                    <section class="admin-section">
+                        <div class="admin-section-header">
+                            <div><h3>Statuts des auditeurs</h3></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="auditorStatuses">+ Ajouter</button>
+                                <button class="export-button" type="button" data-admin-export="auditorStatuses" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="auditorStatuses" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Statut</th><th></th></tr></thead><tbody id="adminStatusesBody"></tbody></table></div>
+                    </section>
+
+                    <section class="admin-section">
+                        <div class="admin-section-header">
+                            <div><h3>Civilités</h3></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="civilities">+ Ajouter</button>
+                                <button class="export-button" type="button" data-admin-export="civilities" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="civilities" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Civilité</th><th></th></tr></thead><tbody id="adminCivilitiesBody"></tbody></table></div>
+                    </section>
+
+                    <section class="admin-section">
+                        <div class="admin-section-header">
+                            <div><h3>Types d'audit</h3></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="auditTypes">+ Ajouter</button>
+                                <button class="export-button" type="button" data-admin-export="auditTypes" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="auditTypes" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Type d'audit</th><th></th></tr></thead><tbody id="adminAuditTypesBody"></tbody></table></div>
+                    </section>
+
+                    <section class="admin-section admin-section-wide">
+                        <div class="admin-section-header">
+                            <div><h3>Méthodes et versions</h3></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="methods">+ Ajouter</button>
+                                <button class="export-button" type="button" data-admin-export="methods" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="methods" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Méthode</th><th>Version</th><th></th></tr></thead><tbody id="adminMethodsBody"></tbody></table></div>
+                    </section>
+
+                    <section class="admin-section admin-section-wide">
+                        <div class="admin-section-header">
+                            <div><h3>Essences</h3></div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="species">+ Ajouter</button>
+                                <button class="export-button" type="button" data-admin-export="species" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="species" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Essence</th><th></th></tr></thead><tbody id="adminSpeciesBody"></tbody></table></div>
+                    </section>
+
+
+
+                    <section class="admin-section admin-section-wide">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Listes personnalisées globales</h3>
+                                <p>Ces listes peuvent être utilisées comme source dynamique par les blocs de type liste déroulante du Rapport.</p>
+                            </div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="customLists">+ Ajouter une liste</button>
+                                <button class="export-button" type="button" data-admin-export="customLists" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="customLists" hidden>📥</label>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Nom de la liste</th><th>Valeurs</th><th></th></tr></thead><tbody id="adminCustomListsBody"></tbody></table></div>
+                    </section>
+
+
+
+                    <section class="admin-section admin-section-full report-schema-admin">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Structure globale du Rapport</h3>
+                                <p>Configuration unique appliquée à tous les projets. Les réglages des blocs sont guidés : type de réponse, remplissage automatique, listes, règles de saisie et présentation.</p>
+                            </div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-report-section-add>+ Ajouter une section</button>
+                            </div>
+                        </div>
+                        <div class="report-schema-layout">
+                            <div class="report-schema-pane">
+                                <h4>Sections du Rapport</h4>
+                                <div id="adminReportSections" class="report-schema-list"></div>
+                            </div>
+                            <div class="report-schema-pane report-schema-pane-wide">
+                                <div class="report-schema-toolbar">
+                                    <div>
+                                        <h4 id="adminReportEditTitle">ÉDITION</h4>
+                                        <p class="admin-help-text">Sélectionne une section à gauche, puis ajoute, supprime ou configure ses blocs.</p>
+                                    </div>
+                                    <button class="inline-add-button" type="button" data-report-block-add>+ Ajouter un bloc</button>
+                                </div>
+                                <div id="adminReportBlocks" class="report-schema-blocks"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="admin-section admin-section-full">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Questions de checklist et applicabilité</h3>
+                                <p>Les colonnes de droite correspondent aux couples Méthode - Version renseignés ci-dessus. Les questions peuvent être réordonnées par glisser-déposer au sein de leur catégorie ; la numérotation se recalcule automatiquement.</p>
+                            </div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="checklistItems">+ Ajouter une question</button>
+                                <button class="export-button" type="button" data-admin-export="checklistItems" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="checklistItems" hidden>📥</label>
+                            </div>
+                        </div>
+                        <p id="adminChecklistEmpty" class="dynamic-empty" hidden>Aucune question de checklist.</p>
+                        <div class="admin-table-wrapper admin-checklist-wrapper">
+                            <table class="admin-table admin-checklist-table">
+                                <thead id="adminChecklistHead"></thead>
+                                <tbody id="adminChecklistBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="admin-section admin-section-full">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Référentiel des co-bénéfices</h3>
+                                <p>Chaque ligne correspond à une réponse possible. Les colonnes Méthode - Version indiquent les points attribués ; une cellule vide signifie que la réponse n’est pas applicable pour ce couple. Les réponses peuvent être réordonnées par glisser-déposer au sein de leur catégorie.</p>
+                            </div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="cobenefitRules">+ Ajouter une réponse</button>
+                                <button class="export-button" type="button" data-admin-export="cobenefitRules" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="cobenefitRules" hidden>📥</label>
+                            </div>
+                        </div>
+                        <p id="adminCobenefitsEmpty" class="dynamic-empty" hidden>Aucun co-bénéfice renseigné.</p>
+                        <div class="admin-table-wrapper admin-cobenefits-wrapper">
+                            <table class="admin-table admin-cobenefits-table">
+                                <thead id="adminCobenefitsHead"></thead>
+                                <tbody id="adminCobenefitsBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="admin-section admin-section-full">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Maximums des co-bénéfices par méthode</h3>
+                                <p>Ces valeurs servent à calculer automatiquement la colonne Audit de la synthèse des co-bénéfices dans le Rapport. Saisis un nombre de points ou <strong>NA</strong> lorsque la catégorie n’est pas applicable.</p>
+                            </div>
+                            <div class="admin-section-actions">
+                                <button class="inline-add-button" type="button" data-admin-add="cobenefitMaxPoints">+ Ajouter une catégorie</button>
+                                <button class="export-button" type="button" data-admin-export="cobenefitMaxPoints" title="Exporter en CSV">📤</button>
+                                <label class="import-button" title="Importer CSV"><input type="file" accept=".csv" data-admin-import="cobenefitMaxPoints" hidden>📥</label>
+                            </div>
+                        </div>
+                        <p id="adminCobenefitMaxEmpty" class="dynamic-empty" hidden>Aucun maximum renseigné.</p>
+                        <div class="admin-table-wrapper admin-cobenefits-wrapper">
+                            <table class="admin-table admin-cobenefits-table">
+                                <thead id="adminCobenefitMaxHead"></thead>
+                                <tbody id="adminCobenefitMaxBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+
+                    <section class="admin-section admin-section-full">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Ordre des onglets du bandeau</h3>
+                                <p>Réorganise l’ordre d’affichage des onglets principaux. Le bandeau reste sur une seule ligne avec défilement horizontal si l’écran est trop étroit.</p>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper compact-admin-wrapper">
+                            <table class="admin-table">
+                                <thead><tr><th></th><th>Onglet</th><th>Position</th></tr></thead>
+                                <tbody id="adminTabOrderBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="admin-section admin-section-full">
+                        <div class="admin-section-header">
+                            <div>
+                                <h3>Matrice d’alerte Checklist × Co-bénéfices</h3>
+                                <p>Coche les questions Checklist qui deviennent obligatoires lorsqu’un co-bénéfice est demandé. Si la question reste vide, N/A ou Non auditée, une alerte rouge apparaît dans la Checklist.</p>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper admin-matrix-wrapper">
+                            <table class="admin-table admin-matrix-table">
+                                <thead id="adminChecklistCobenefitMatrixHead"></thead>
+                                <tbody id="adminChecklistCobenefitMatrixBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </section>
+
     </main>
+
+    <!-- PANNEAU LATÉRAL ADMIN -->
+    <aside id="adminSidepanel" class="admin-sidepanel">
+        <div class="admin-sidepanel-header">
+            <h2>⚙️ Paramètres</h2>
+            <button id="closeAdminPanel" class="close-button" type="button" title="Fermer">✕</button>
+        </div>
+        <div class="admin-sidepanel-content">
+            <!-- Contenu Admin sera injecté ici via JavaScript -->
+        </div>
+    </aside>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <footer class="app-footer project-workspace">
-        <span>Inventaire forestier</span>
-        <span>Version 2.14.0</span>
+        <span>Audit Label Bas-Carbone Forêt</span>
+        <span>Version 3.29.0</span>
     </footer>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=3.29.0"></script>
 </body>
 </html>

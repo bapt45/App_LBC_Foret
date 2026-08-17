@@ -1,7 +1,7 @@
 {
-  "name": "Inventaire forestier",
-  "short_name": "Inventaire",
-  "description": "Application d'inventaire forestier pour compter les plants vivants et morts par tènement.",
+  "name": "Audit Label Bas-Carbone Forêt",
+  "short_name": "Audit LBC",
+  "description": "Application d'audit Label Bas-Carbone Forêt.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1B1D43",

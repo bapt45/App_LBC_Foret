@@ -1,0 +1,56 @@
+{
+  "name": "audit-lbc-foret-desktop",
+  "version": "3.29.0",
+  "description": "Application desktop Windows pour les audits Label Bas-Carbone Foret.",
+  "main": "electron/main.js",
+  "author": "Control Union Inspections France",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check electron/main.js && node --check electron/preload.js && node --check app.js",
+    "dist:win": "electron-builder --win nsis portable --x64",
+    "dist:portable": "electron-builder --win portable --x64",
+    "dist:setup": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.controlunion.auditlbcforet",
+    "productName": "Audit LBC Foret",
+    "artifactName": "Audit-LBC-Foret-${version}-${os}-${arch}.${ext}",
+    "asar": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "build/icon.ico",
+      "build/icon.png",
+      "index.html",
+      "app.js",
+      "style.css",
+      "manifest.json",
+      "sw.js",
+      "assets/**/*",
+      "README.txt",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Audit LBC Foret"
+    }
+  }
+}
